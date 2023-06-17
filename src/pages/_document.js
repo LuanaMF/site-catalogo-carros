@@ -20,7 +20,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <Button>Click me</Button>
         </body>
       </Html>
     );
