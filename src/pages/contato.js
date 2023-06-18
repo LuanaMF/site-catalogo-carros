@@ -1,4 +1,4 @@
-import { Card, createTheme, Text, Textarea, Input, Spacer, Button } from "@nextui-org/react";
+import { Card, createTheme, Text, Textarea, Input, Button } from "@nextui-org/react";
 import { NextUIProvider } from '@nextui-org/react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
@@ -8,12 +8,14 @@ const theme = createTheme({
     colors: {
       azulMeu: '#2703B6',
       colorCard2: 'white',
-
+      textColor: '#333',
+      yellowColor: '#f5b921'
     },
   }
 });
 
 export default function TelaContatos() {
+
   return (
     <>
       <style>{`
@@ -21,6 +23,7 @@ export default function TelaContatos() {
           background-color: #f5b921;
         }
       `}</style>
+
       <NextUIProvider theme={theme}>
         <div
           style={{
@@ -38,11 +41,15 @@ export default function TelaContatos() {
               gap: '0px',
             }}
           >
+            {/* Primeiro Card com formulário */}
             <Card justify='center' css={{ w: "400px", h: 'auto'}} >
+
               <Card.Header css={{ textAlign: 'center' }}>
                 <Text b css={{ display: 'inline-block', margin: '0 auto', color: '$black' }}>Email</Text>
               </Card.Header>
+
               <Card.Divider />
+
               <Card.Body css={{ alignItems: 'center' }}>
                 <form>
                     <Input
@@ -68,75 +75,24 @@ export default function TelaContatos() {
                     />
                 </form>
               </Card.Body>
+
               <Card.Footer css={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Button size="sm" color="warning" ghost >
                     Enviar
                 </Button>
               </Card.Footer>
+
             </Card>
 
-            <Card justify='center' css={{ w: "450px", h: '600px', borderRadius: '5px'}} >
-              <Card.Header css={{ textAlign: 'center', backgroundColor: '$azulMeu'}}>
-                    <Text b css={{ display: 'inline-block', margin: '0 auto', color: '$white',  
-                        fontFamily: "Tahoma", 
-                        fontSize: '50px',
-                        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                        letterSpacing: '5px',
-                        lineHeight: '1.5'
-                }}>
-                    Contato
-                    </Text>
-              </Card.Header>
-              <Card.Body css={{ alignItems: 'center', textAlign:'center', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                <Text b 
-                css={{ 
-                    display: 'inline-block', 
-                    margin: '0 auto', 
-                    color: '$white', 
-                    marginTop: '-100px',
-                    fontFamily: "arial", 
-                    fontSize: '20px',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                    letterSpacing: '1px',
-                    lineHeight: '1.5'
-                }}>
-                    Quer falar direto com a gente?
+            {/* Segundo Card com texto */}
+            <Card justify='center' css={{ w: "450px", h: '650px', borderRadius: '5px'}} >
 
-                    Preencha o formulário o lado e envie-nos um email!
-
-                    Ou, se preferir, nos contate em uma das redes sociais abaixo:
-                </Text>
-                <Spacer y={2} />
-                <Text b 
-                css={{ 
-                    display: 'inline-block', 
-                    margin: '0 auto', 
-                    color: '$white', 
-                    marginTop: '-10px',
-                    fontFamily: "arial", 
-                    fontSize: '20px',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                    letterSpacing: '1px',
-                    lineHeight: '1.5'
-                }}>
-                    
-                </Text>
-                <Spacer y={2} />
-                <Text b 
-                css={{ 
-                    display: 'inline-block',
-                    margin: '0 auto', 
-                    color: '$white', 
-                    marginTop: '-10px',
-                    fontFamily: "arial", 
-                    fontSize: '20px',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                    letterSpacing: '1px',
-                    lineHeight: '1.5'
-                }}>
-                </Text>
+              <Card.Header css={{ textAlign: 'center', justifyContent: 'center', backgroundColor: '$azulMeu'}}></Card.Header>
+              
+              <Card.Body >
               </Card.Body>
-              <Card.Footer css={{ alignItems: 'center', justifyContent: 'center' , backgroundColor: '$azulMeu'}}>
+
+              <Card.Footer css={{ alignItems: 'center', justifyContent: 'center', marginTop:'30px', backgroundColor: '$azulMeu' }}>
                 <Button rounded color="gradient" auto ghost css={{ margin: '0.5rem' }}>
                     <FaWhatsapp />
                 </Button>
@@ -144,6 +100,7 @@ export default function TelaContatos() {
                     <FaInstagram />
                 </Button>
               </Card.Footer>
+
             </Card>
           </div>
         </div>
