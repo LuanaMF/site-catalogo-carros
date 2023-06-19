@@ -1,7 +1,6 @@
 
 import connection from '../../lib/db';
 
-var md5 = require('md5');
 
 export default async function getAdmin(req, res) {
 
@@ -12,7 +11,7 @@ export default async function getAdmin(req, res) {
 
     switch(service){
 
-      //Serviço que altera senha
+      //Serviço que cadastra carro
       case 'cadastrarCarro':{
         const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio} = req.body;
 
@@ -35,7 +34,7 @@ export default async function getAdmin(req, res) {
         break;
       }
 
-      // Serviço que cadastra admin
+      // Serviço que edita carro
       case'editarCarro' :{
 
         const {id, marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio} = req.body;
