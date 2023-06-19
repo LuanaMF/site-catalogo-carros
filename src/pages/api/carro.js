@@ -1,6 +1,107 @@
 
-import connection from '../../lib/db';
+import { query } from "@/lib/db";
 
+//Função retorna carro especifico passado id
+async function getCarro(id){
+    const sql = `
+              SELECT * FROM carro WHERE id = ?
+          `;
+    
+    const response = await query({
+      query: sql,
+      values: [id]
+    })
+
+    if (Object.keys(response).length > 0) {
+      return response[0]
+    } else {
+      return null
+    }
+
+}
+
+//Função retorna carro especifico passado id
+async function getImgs(id){
+  const sql = `
+            SELECT img FROM img_carro WHERE id_carro = ?
+        `;
+  
+  const response = await query({
+    query: sql,
+    values: [id]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+
+}
+
+// Retorna todos carros
+async function getAllCarros(){
+  // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
+  const sql = `
+    SELECT c.*, GROUP_CONCAT(i.img) AS imagens
+    FROM carro c
+    LEFT JOIN img_carro i ON c.id = i.id_carro
+    GROUP BY c.id;
+  `
+  connection.query(sql, (error, resultsCarro) => {
+    if (error) {
+      return error;
+    }
+    else{
+      return resultsCarro
+    }
+  });
+}
+
+async function deleteCarro(id){
+  connection.query('DELETE FROM carro WHERE id = ?', id, (error, results) => {
+    if (error) {
+      return error
+    }
+    else{
+      return results
+    }
+  });
+}
+
+async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id){
+  const sql = `
+            UPDATE carro SET
+            marca = ?, modelo_versao = ?, ano_fabricacao = ?, ano_modelo = ?, quilometragem = ?, combustivel = ?, cambio = ?
+            WHERE
+            id = ?;
+        `;
+
+  connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id], (error, results) => {
+      if (error) {
+          return error
+      }
+      else{
+          return results
+      }
+  });
+}
+
+async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio){
+  const sql = `
+            INSERTO INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel, cambio)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        `;
+
+  connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio], (error, results) => {
+    if (error) {
+        return error
+    }
+    else{
+        return results
+    }
+  });
+}
 
 export default async function getAdmin(req, res) {
 
@@ -15,21 +116,8 @@ export default async function getAdmin(req, res) {
       case 'cadastrarCarro':{
         const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio} = req.body;
 
-        const sql = `
-            INSERTO INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel, cambio)
-            VALUES (?, ?, ?, ?, ?, ?, ?);
-        `;
-
-        connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio], (error, results) => {
-        if (error) {
-            return res.status(405).json({msg: 'Erro ao cadastrar o carro!', erro: error});
-        }
-        else{
-            return res.status(200).json(results);
-
-        }
-
-        });
+        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio);
+        res.json({ result: result});
        
         break;
       }
@@ -37,40 +125,18 @@ export default async function getAdmin(req, res) {
       // Serviço que edita carro
       case'editarCarro' :{
 
-        const {id, marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio} = req.body;
-
-        const sql = `
-            UPDATE carro SET
-            marca = ?, modelo_versao = ?, ano_fabricacao = ?, ano_modelo = ?, quilometragem = ?, combustivel = ?, cambio = ?
-            WHERE
-            id = ?;
-        `;
-
-        connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id], (error, results) => {
-            if (error) {
-                return res.status(405).json({msg: 'Erro ao editar o carro!', erro: error});
-            }
-            else{
-                return res.status(200).json(results);
-    
-            }
-
-        });
+        const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id} = req.body;
+        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id);
+        res.json({ result: result});
        
         break;
       }
 
       // Serviço de deletar carro
       case 'delete' :{
-        connection.query('DELETE FROM carro WHERE id = ?', req.body.id, (error, results) => {
-            if (error) {
-                return res.status(405).json({msg: 'Erro ao deletar o carro!', erro: error});
-            }
-            else{
-                return res.status(200).json(results);
-            }
-    
-        });
+        const { id } = req.body;
+        const result = await deleteCarro(id);
+        res.json({ result: result});
            
         break;
        
@@ -78,45 +144,22 @@ export default async function getAdmin(req, res) {
     }
 
   }else{
-    // Se não passar o serviço no body, mas passar o id, ele retorna o carro e imagens com esse id
+    
+    // Se não passar o serviço na requisição, mas passar o id, ele retorna o carro e imagens com esse id
     if(req.body.id){
         
-        const sql = `
-            SELECT c.*, GROUP_CONCAT(i.img) AS imagens
-            FROM carro c
-            LEFT JOIN img_carro i ON c.id = i.id_carro
-            WHERE c.id = ?;
-        `;
-
-        connection.query(sql, req.body.id, (error, results) => {
-          if (error) {
-            return res.status(405).json({msg: 'Erro ao buscar o carro!', erro: error});
-          }
-          else{
-            return res.status(200).json(results);
-
-          }
-        });
+        const { id } = req.body;
+        const resultCarro = await getCarro(id);
+        const resultImg = await getImgs(id);
+       
+        res.json({ carro: resultCarro, imagens: resultImg});
 
     }
 
     //Se não passar nada no body retorna todos os carros e suas imagens
     else{
-        // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
-        const sql = `
-            SELECT c.*, GROUP_CONCAT(i.img) AS imagens
-            FROM carro c
-            LEFT JOIN img_carro i ON c.id = i.id_carro
-            GROUP BY c.id;
-        `
-        connection.query(sql, (error, resultsCarro) => {
-            if (error) {
-              return res.status(405).json({msg: 'Erro ao buscar os carros!', erro: error});
-            }
-            else{
-               return res.status(200).json({msg: 'Carros recuperados com sucesso', carros: resultsCarro})
-            }
-        });
+      const result = await getAllCarros();
+      res.json({ result: result});
         
     }
     
