@@ -1,8 +1,9 @@
-import { Card, createTheme, Text, Textarea, Input, Button, Modal, Loading } from "@nextui-org/react";
+import { Card, createTheme, Text, Textarea, Input, Button, Modal, Loading, Spacer } from "@nextui-org/react";
 import { NextUIProvider } from '@nextui-org/react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useState } from "react";
 import {FcCheckmark, FcCancel} from 'react-icons/fc'
+import Link from "next/link";
 
 const theme = createTheme({
   type: "light",
@@ -95,15 +96,15 @@ export default function TelaContatos() {
       `}</style>
 
       <NextUIProvider theme={theme}>
-
-      <Modal noPadding open={visible} onClose={closeHandler} css={{h:'200px'}}>
-        <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
-          {alertProps.icon}
-          <Text css={{marginBottom: '80px'}}>
-            {alertProps.mensagem}
-          </Text>
-        </Modal.Body>
-      </Modal>
+        {/* Modal que to usando como alert */}
+        <Modal noPadding open={visible} onClose={closeHandler} css={{h:'200px'}}>
+          <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+            {alertProps.icon}
+            <Text css={{marginBottom: '80px'}}>
+              {alertProps.mensagem}
+            </Text>
+          </Modal.Body>
+        </Modal>
         
         <div
           style={{
@@ -122,8 +123,7 @@ export default function TelaContatos() {
               gap: '0px',
             }}
           >
-            {/* Primeiro Card com formulário */}
-            <Card className='card'justify='center' css={{ w: "400px", h: 'auto'}} >
+            <Card className='card' justify='center' css={{ w: "400px", h: 'auto' }}>
 
               <Card.Header css={{ textAlign: 'center' }}>
                 <Text b css={{ display: 'inline-block', margin: '0 auto', color: '$black' }}>Email</Text>
@@ -133,56 +133,59 @@ export default function TelaContatos() {
 
               <Card.Body css={{ alignItems: 'center' }}>
                 <form>
-                    <Input
+                  <Input
                     clearable
                     underlined
                     color="warning"
                     label="Nome"
                     css={{ marginTop: '10px', w: "350px", textEmphasisColor: '$black' }}
                     onChange={(e) => email.nome = e.target.value}
-                    />
-                    <Input
+                  />
+                  <Input
                     clearable
                     underlined
                     color="warning"
                     label="Telefone"
                     maxLength={14}
-                    css={{ marginTop: '65px', w: "350px" }}
+                    css={{ marginTop: '20px', w: "350px" }}
                     onChange={(e) => mascara(e)}
-                    />
-                    <Textarea
+                  />
+                  <Textarea
                     clearable
                     underlined
                     color="warning"
                     label="Mensagem"
-                    css={{ marginTop: '65px', w: '360px' }}
+                    css={{ marginTop: '20px', w: '360px' }}
                     onChange={(e) => email.mensagem = e.target.value}
-                    />
+                  />
                 </form>
               </Card.Body>
 
-              <Card.Footer css={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Button size="sm" color="warning" ghost onPress={enviaEmail} >
-                    Enviar
+              <Card.Footer css={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                <Button size="sm" color="warning" ghost onPress={enviaEmail} css={{ marginBottom: '0.5rem' }}>
+                  Enviar
                 </Button>
-              </Card.Footer>
-            </Card>
 
-            {/* Segundo Card com texto */}
-            <Card className='card' justify='center' css={{ w: "450px", h: '650px', borderRadius: '5px'}} >
+                <Spacer y={1}></Spacer>
 
-              <Card.Header css={{ textAlign: 'center', justifyContent: 'center', backgroundColor: '$azulMeu'}}></Card.Header>
-              
-              <Card.Body >
-              </Card.Body>
+                <div style={{justifyContent: 'center'}}>
+                  <Text>
+                    Ou, se preferir, contate-nos via:
+                  </Text>
+                </div>
 
-              <Card.Footer css={{ alignItems: 'center', justifyContent: 'center', marginTop:'30px', backgroundColor: '$azulMeu' }}>
-                <Button rounded color="gradient" auto ghost css={{ margin: '0.5rem' }}>
-                    <FaWhatsapp />
-                </Button>
-                <Button rounded color="gradient" auto ghost css={{ margin: '0.5rem' }}>
-                    <FaInstagram />
-                </Button>
+                <div>
+                  <Button rounded color="gradient" auto ghost style={{ marginBottom: '-50px !important', marginLeft:'65px !important', margin: '0.5rem' }}>
+                      <FaWhatsapp />
+                  </Button>
+
+                  <Link href="https://www.instagram.com/sneto_veiculos/" css={{  marginBottom: '0.5rem' }}>
+                    <Button rounded color="gradient" auto ghost css={{  margin: '0.5rem' }}>
+                      <FaInstagram />
+                    </Button>
+                  </Link>
+                </div>
+                
               </Card.Footer>
 
             </Card>
