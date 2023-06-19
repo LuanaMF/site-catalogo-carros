@@ -175,9 +175,11 @@ export default function TelaContatos() {
                 </div>
 
                 <div>
-                  <Button rounded color="gradient" auto ghost style={{ marginBottom: '-50px !important', marginLeft:'65px !important', margin: '0.5rem' }}>
-                      <FaWhatsapp />
-                  </Button>
+                  <Link href="https://wa.me/557582098137">
+                    <Button rounded color="gradient" auto ghost style={{ marginBottom: '-50px !important', marginLeft:'65px !important', margin: '0.5rem' }}>
+                        <FaWhatsapp />
+                    </Button>
+                  </Link>
 
                   <Link href="https://www.instagram.com/sneto_veiculos/" css={{  marginBottom: '0.5rem' }}>
                     <Button rounded color="gradient" auto ghost css={{  margin: '0.5rem' }}>
