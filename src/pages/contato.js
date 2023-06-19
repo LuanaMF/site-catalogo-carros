@@ -1,6 +1,7 @@
 import { Card, createTheme, Text, Textarea, Input, Button } from "@nextui-org/react";
 import { NextUIProvider } from '@nextui-org/react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { useState } from "react";
 
 const theme = createTheme({
   type: "light",
@@ -15,6 +16,24 @@ const theme = createTheme({
 });
 
 export default function TelaContatos() {
+
+  const [email, setEmail] = useState({
+    nome: '',
+    telefone: '',
+    mensagem: ''
+  });
+
+  async function enviaEmail() {
+    const response = await fetch('/api/services/emailService', 
+      {
+        method: 'POST',
+        body: JSON.stringify(email)
+      }
+    ).then((value) => {
+     
+    });
+
+    }
 
   return (
     <>
@@ -58,6 +77,7 @@ export default function TelaContatos() {
                     color="warning"
                     label="Nome"
                     css={{ marginTop: '10px', w: "350px", textEmphasisColor: '$black' }}
+                    onChange={(e) => email.nome = e.target.value}
                     />
                     <Input
                     clearable
@@ -65,6 +85,7 @@ export default function TelaContatos() {
                     color="warning"
                     label="Telefone"
                     css={{ marginTop: '65px', w: "350px" }}
+                    onChange={(e) => email.telefone = e.target.value}
                     />
                     <Textarea
                     clearable
@@ -72,12 +93,13 @@ export default function TelaContatos() {
                     color="warning"
                     label="Mensagem"
                     css={{ marginTop: '65px', w: '360px' }}
+                    onChange={(e) => email.mensagem = e.target.value}
                     />
                 </form>
               </Card.Body>
 
               <Card.Footer css={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Button size="sm" color="warning" ghost >
+                <Button size="sm" color="warning" ghost onPress={enviaEmail} >
                     Enviar
                 </Button>
               </Card.Footer>
