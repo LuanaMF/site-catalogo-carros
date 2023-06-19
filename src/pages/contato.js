@@ -1,7 +1,8 @@
-import { Card, createTheme, Text, Textarea, Input, Button } from "@nextui-org/react";
+import { Card, createTheme, Text, Textarea, Input, Button, Modal, Loading } from "@nextui-org/react";
 import { NextUIProvider } from '@nextui-org/react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useState } from "react";
+import {FcCheckmark, FcCancel} from 'react-icons/fc'
 
 const theme = createTheme({
   type: "light",
@@ -23,6 +24,14 @@ export default function TelaContatos() {
     mensagem: ''
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [alertProps, setAlertProps] = useState({
+    mensagem: 'Email enviado com sucesso!',
+    icon: <FcCheckmark size={80}></FcCheckmark>
+  })
+
+  // Mascara do input de telefone para ficar bunitin
   const mascara = (e) => {{
     const textoAtual = e.target.value;
     let textoAjustado;
@@ -35,17 +44,47 @@ export default function TelaContatos() {
     email.telefone = e.target.value;
   }}
 
+  //Função do botão enviar
   async function enviaEmail() {
-    const response = await fetch('/api/services/emailService', 
-      {
-        method: 'POST',
-        body: JSON.stringify(email)
-      }
-    ).then((value) => {
-     
-    });
 
+    if(email.nome != '' && email.telefone != '' && email.mensagem != ''){
+
+      //Abre loading
+      document.body.style.backgroundColor = 'white';
+      document.getElementById('divCards').style.display = 'none';
+      setIsLoading(true);
+
+      //Chama serviço de enviar email
+      const response = await fetch('/api/services/emailService', 
+        {
+          method: 'POST',
+          body: JSON.stringify(email)
+        }
+      ).then((value) => {
+        //Mostra modal de sucesso
+        alertProps.mensagem = 'Email enviado com sucesso!';
+        alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
+        setVisible(true);
+      });
+
+      // Fecha loading
+      setIsLoading(false);
+      document.body.style.backgroundColor = '#f5b921';
+      document.getElementById('divCards').style.display = 'flex';
+
+    }
+    else{
+      alertProps.mensagem = 'Por favor preencha todos os campos!';
+      alertProps.icon = <FcCancel size={80}></FcCancel>
+      setVisible(true);
+    }
   }
+
+  const [visible, setVisible] = useState(false);
+
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
   return (
     <>
@@ -56,6 +95,16 @@ export default function TelaContatos() {
       `}</style>
 
       <NextUIProvider theme={theme}>
+
+      <Modal noPadding open={visible} onClose={closeHandler} css={{h:'200px'}}>
+        <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+          {alertProps.icon}
+          <Text css={{marginBottom: '80px'}}>
+            {alertProps.mensagem}
+          </Text>
+        </Modal.Body>
+      </Modal>
+        
         <div
           style={{
             display: 'flex',
@@ -65,6 +114,7 @@ export default function TelaContatos() {
           }}
         >
           <div
+            id="divCards"
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -73,7 +123,7 @@ export default function TelaContatos() {
             }}
           >
             {/* Primeiro Card com formulário */}
-            <Card justify='center' css={{ w: "400px", h: 'auto'}} >
+            <Card className='card'justify='center' css={{ w: "400px", h: 'auto'}} >
 
               <Card.Header css={{ textAlign: 'center' }}>
                 <Text b css={{ display: 'inline-block', margin: '0 auto', color: '$black' }}>Email</Text>
@@ -116,11 +166,10 @@ export default function TelaContatos() {
                     Enviar
                 </Button>
               </Card.Footer>
-
             </Card>
 
             {/* Segundo Card com texto */}
-            <Card justify='center' css={{ w: "450px", h: '650px', borderRadius: '5px'}} >
+            <Card className='card' justify='center' css={{ w: "450px", h: '650px', borderRadius: '5px'}} >
 
               <Card.Header css={{ textAlign: 'center', justifyContent: 'center', backgroundColor: '$azulMeu'}}></Card.Header>
               
@@ -137,8 +186,23 @@ export default function TelaContatos() {
               </Card.Footer>
 
             </Card>
+            
           </div>
+          {/* Renderiza o componente Loading se isLoading for verdadeiro */}
+          {isLoading && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  <Loading size="xl"/>
+                </div>
+          )}
         </div>
+        
       </NextUIProvider>
     </>
   );
