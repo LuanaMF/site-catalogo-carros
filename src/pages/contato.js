@@ -23,6 +23,18 @@ export default function TelaContatos() {
     mensagem: ''
   });
 
+  const mascara = (e) => {{
+    const textoAtual = e.target.value;
+    let textoAjustado;
+    
+    textoAjustado = textoAtual.replace(/(\d{2})(\d{5})(\d{4})/,
+                        function( regex, arg1, arg2, arg3) {
+                        return '('+arg1+')' + ' '+ arg2 + '-' + arg3 ;
+    });
+    e.target.value = textoAjustado;
+    email.telefone = e.target.value;
+  }}
+
   async function enviaEmail() {
     const response = await fetch('/api/services/emailService', 
       {
@@ -33,7 +45,7 @@ export default function TelaContatos() {
      
     });
 
-    }
+  }
 
   return (
     <>
@@ -84,8 +96,9 @@ export default function TelaContatos() {
                     underlined
                     color="warning"
                     label="Telefone"
+                    maxLength={14}
                     css={{ marginTop: '65px', w: "350px" }}
-                    onChange={(e) => email.telefone = e.target.value}
+                    onChange={(e) => mascara(e)}
                     />
                     <Textarea
                     clearable
