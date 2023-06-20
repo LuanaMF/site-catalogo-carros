@@ -1,9 +1,78 @@
 
-import connection from '../../lib/db';
+import { query } from "@/lib/db";
 
 var md5 = require('md5');
 
-export default async function getAdmin(req, res) {
+async function alterarSenha(senha, login){
+  const response = await query({
+    query: 'UPDATE admin SET senha = ? WHERE login = ?',
+    values: [senha, login]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+  }
+}
+
+async function cadastraAdmin(nome, sobrenome, login, senha){
+  const response = await query({
+    query: 'INSERT INTO admin (nome, sobrenome, login, senha) VALUES(?, ?, ?, ?);',
+    values: [nome, sobrenome, login, senha]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+  }
+
+}
+
+async function login(login, senha){
+  const response = await query({
+    query: 'SELECT * FROM admin WHERE login = ? AND senha = ?;',
+    values: [login, senha]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+  }
+
+}
+
+async function todosAdmins(){
+  const response = await query({
+    query: 'SELECT * FROM admin',
+    values: []
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+
+}
+
+async function getAdminPorEmail(login){
+  const response = await query({
+    query: 'SELECT * FROM admin WHERE login = ?',
+    values: [login]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+  
+}
+
+export default async function servicoAdmin(req, res) {
 
   // Recebe o serviço
   const service = req.body.service;
@@ -17,34 +86,17 @@ export default async function getAdmin(req, res) {
 
         const {login, novaSenha} = req.body;
         const senhaHash = md5(novaSenha);
-        
-        connection.query('UPDATE admin SET senha = ? WHERE login = ?', [senhaHash, login],
-        (error, results) => {
-              if (error) {
-                return res.status(405).json({msg: 'Erro ao alterar senha!', erro: error});
-              }
-              else{
-
-                return res.status(200).json({msg: 'Senha alterada com sucesso!'});
-              }
-        });
-        
+        const response = await alterarSenha(senhaHash, login);
+        res.json({ result: response});
+       
         break;
       }
       // Serviço que cadastra admin
       case'cadastrarAdmin' :{
         const {nome, sobrenome, login, senha} = req.body;
 
-        connection.query('INSERT INTO admin (nome, sobrenome, login, senha) VALUES(?, ?, ?, ?);', [nome, sobrenome, login, senha],
-        (error, results) => {
-            if (error) {
-              return res.status(405).json({msg: 'Erro ao cadastrar o admin!', erro: error});
-            }
-            else{
-
-              return res.status(200).json({msg: 'Admin registrado com sucesso'});
-            }
-        });
+        const response = await cadastraAdmin(nome, sobrenome, login, senha);
+        res.json({ result: response});
         
         break;
       }
@@ -53,24 +105,8 @@ export default async function getAdmin(req, res) {
 
         const {login, senha} = req.body;
         const senhaHash = md5(senha);
-        
-        connection.query('SELECT * FROM admin WHERE login = ? AND senha = ?;', [login, senhaHash],
-        (error, results) => {
-              if (error) {
-
-                return res.status(405).json({msg: 'Erro ao buscar o admin!', erro: error});
-              }
-              else{
-
-                if(results.length > 0){
-                  return res.status(200).json({ admin: results});
-                }
-                else{
-                  return res.status(200).json({msg: 'Login ou senha incorreta!'});
-                  
-                }
-              }
-        });
+        const response = await login(login, senha);
+        res.json({ result: response});
         
         break;
       }
@@ -79,32 +115,15 @@ export default async function getAdmin(req, res) {
   }else{
     // Se não passar o serviço no body, mas passar o login, ele retorna o admin com esse login
     if(req.body.login){
-      
-        connection.query('SELECT * FROM admin WHERE login = ?', req.body.login, (error, results) => {
-          if (error) {
-            return res.status(405).json({msg: 'Erro ao buscar o admin!', erro: error});
-          }
-          else{
-            return res.status(200).json(results);
-
-          }
-        });
+        const admin = await getAdminPorEmail(req.body.login);
+        res.json({ result: admin});
+        
     }
     // Se não passar nada no body ele retorna todos os admins
     else{
 
-      connection.query('SELECT * FROM admin', (error, results) => {
-
-        if (error) {
-          return res.status(405).json({ msg: 'Erro ao buscar o admin!', erro: error });
-        }
-        else{
-
-          return res.status(200).json(results);
-        }
-
-      });
-
+      const admins = await todosAdmins();
+      res.json({ result: admins});
     }
     
   }
