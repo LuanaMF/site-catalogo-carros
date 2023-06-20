@@ -32,7 +32,7 @@ export default function SelectCombustivel({onChange}) {
 
   return (
     <Dropdown>
-      <Dropdown.Button flat color="secondary" css={{ tt: "capitalize" }}>
+      <Dropdown.Button flat color="warning" css={{ tt: "capitalize" }}>
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
