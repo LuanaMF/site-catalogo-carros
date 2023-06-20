@@ -43,80 +43,88 @@ async function getImgs(id){
 async function getAllCarros(){
   // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
   const sql = `
-    SELECT c.*, GROUP_CONCAT(i.img) AS imagens
-    FROM carro c
-    LEFT JOIN img_carro i ON c.id = i.id_carro
-    GROUP BY c.id;
+    SELECT * FROM carro
   `
-  connection.query(sql, (error, resultsCarro) => {
-    if (error) {
-      return error;
-    }
-    else{
-      return resultsCarro
-    }
-  });
+  const response = await query({
+    query: sql,
+    values: []
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+ 
 }
 
 async function deleteCarro(id){
-  connection.query('DELETE FROM carro WHERE id = ?', id, (error, results) => {
-    if (error) {
-      return error
-    }
-    else{
-      return results
-    }
-  });
+
+  const response = await query({
+    query: 'DELETE FROM carro WHERE id = ?',
+    values: [id]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+  }
+
 }
 
-async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id){
+async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido,leiloado, gnv, obs, id){
   const sql = `
             UPDATE carro SET
-            marca = ?, modelo_versao = ?, ano_fabricacao = ?, ano_modelo = ?, quilometragem = ?, combustivel = ?, cambio = ?
+              marca = ?, modelo_versao = ?, ano_fabricacao = ?, ano_modelo = ?, quilometragem = ?, combustivel_id = ?, cambio = ?,
+              vendido = ?, devolvido = ?, leiloado = ?, gnv = ?, observacoes = ?
             WHERE
-            id = ?;
+              id = ?;
         `;
 
-  connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id], (error, results) => {
-      if (error) {
-          return error
-      }
-      else{
-          return results
-      }
-  });
+  const response = await query({
+    query: sql,
+    values: [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+        }
 }
 
-async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio){
+async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs){
   const sql = `
-            INSERTO INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel, cambio)
-            VALUES (?, ?, ?, ?, ?, ?, ?);
+            INSERTO INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `;
 
-  connection.query(sql, [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio], (error, results) => {
-    if (error) {
-        return error
-    }
-    else{
-        return results
-    }
-  });
+  const response = await query({
+    query: sql,
+    values: [id]
+  })
+  if (Object.keys(response).length > 0) {
+    return response[marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs]
+  } else {
+    return null
+  }
 }
 
-export default async function getAdmin(req, res) {
+export default async function servicoCarro(req, res) {
 
   // Recebe o serviço
   const service = req.body.service;
-
+  const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs} = req.body;
+  
   if(service){
 
     switch(service){
 
       //Serviço que cadastra carro
       case 'cadastrarCarro':{
-        const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio} = req.body;
 
-        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio);
+        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs);
         res.json({ result: result});
        
         break;
@@ -124,9 +132,9 @@ export default async function getAdmin(req, res) {
 
       // Serviço que edita carro
       case'editarCarro' :{
+        const { id } = req.body;
 
-        const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id} = req.body;
-        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, id);
+        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id);
         res.json({ result: result});
        
         break;
