@@ -37,7 +37,7 @@ export default function SelectCombustivel({onChange}) {
       </Dropdown.Button>
       <Dropdown.Menu
         aria-label="Single selection actions"
-        color="secondary"
+        color="warning"
         disallowEmptySelection
         selectionMode="single"
         selectedValue={selected}
