@@ -4,7 +4,7 @@ import { query } from "@/lib/db";
 //Função retorna carro especifico passado id
 async function getCarro(id){
     const sql = `
-              SELECT * FROM carro WHERE id = ?
+              SELECT c.*, cb.descricao AS combustivel FROM carro c INNER JOIN combustivel cb ON c.combustivel_id = cb.id WHERE c.id = ?
           `;
     
     const response = await query({
