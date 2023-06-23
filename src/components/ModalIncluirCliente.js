@@ -1,19 +1,19 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import { Modal, Button, Text, Input, Row, Checkbox, Grid, Spacer } from "@nextui-org/react";
 import { FaPlus, FaUserPlus } from 'react-icons/fa';
 import * as router from '@/pages/api/router';
 
 
-export default function ModalIncluirCliente(editCliente) {
+export default function ModalIncluirCliente({ editCliente, argCliente }) {
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const handler = () => setVisible(true);
 
   const closeHandler = () => {
     setVisible(false);
   };
 
-  const [cliente, setCliente] = React.useState({
+  const [cliente, setCliente] = useState({
     nomeCompleto: '',
     cpf: '',
     rg: '',
@@ -23,24 +23,25 @@ export default function ModalIncluirCliente(editCliente) {
     bairro: '',
     rua: '',
     numero: '',
-    fornecedor: false,
+    fornecedor: '',
     service: '',
     telefone: '',
     cidade: ''
   });
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(editCliente){
-            setCliente(editCliente);
-            setCliente.service = 'editarCliente';
+            cliente.service = 'editarCliente';
+            setCliente(argCliente);
         }
     }, [editCliente]);
 
-  const handleOnClick = async () => {
-    setCliente.service = 'cadastraCliente';
+
+  async function handleOnClick() {
+    cliente.service = 'cadastraCliente';
     try {
         const response = await router.apiPost(cliente, 'cliente');
-        console.log(response)
+        
     } catch (error) {
         console.log(error);
     }
@@ -62,8 +63,6 @@ export default function ModalIncluirCliente(editCliente) {
         }}
       >
         <Modal.Header css={{justifyContent: 'center'}}>
-            <FaUserPlus size={52}></FaUserPlus>
-
             <Row justify="center">
                 <Text id='modal-title' b size={18}>
                 Cadastro de cliente
@@ -238,8 +237,8 @@ export default function ModalIncluirCliente(editCliente) {
           <Button auto flat color="error" onPress={closeHandler}>
             Cancelar
           </Button>
-          <Button auto onPress={handleOnClick}>
-            Cadastrar cliente
+          <Button auto onPress={() =>  handleOnClick(cliente)}>
+            { editCliente? 'Salvar alterações' : 'Cadastrar cliente'}
           </Button>
         </Modal.Footer>
       </Modal>
