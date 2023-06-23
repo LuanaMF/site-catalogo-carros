@@ -5,7 +5,7 @@ import * as router from '../api/router';
 import { Card, Text, Button, Spacer} from "@nextui-org/react";
 import Link from "next/link";
 import { FaWhatsapp} from 'react-icons/fa';
-
+import ModalIncluirCliente from '@/components/ModalIncluirCliente';
 
 function TelaCarro() {
     
@@ -109,6 +109,7 @@ function TelaCarro() {
                     </Card.Footer>
                 </Card>
             </div>
+            <ModalIncluirCliente></ModalIncluirCliente>
         </div>
     </>
   );
