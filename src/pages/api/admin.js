@@ -72,6 +72,20 @@ async function getAdminPorEmail(login){
   
 }
 
+async function excluiAdmin(login){
+  const response = await query({
+    query: 'DELETE FROM admin WHERE login = ?',
+    values: [login]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+  
+}
+
 export default async function servicoAdmin(req, res) {
 
   // Recebe o serviço
@@ -105,10 +119,14 @@ export default async function servicoAdmin(req, res) {
 
         const {login, senha} = req.body;
         const senhaHash = md5(senha);
-        const response = await login(login, senha);
+        const response = await login(login, senhaHash);
         res.json({ result: response});
         
         break;
+      }
+      case 'delete':{
+        const admin = await excluiAdmin(req.body.login);
+        res.json({ result: admin});
       }
     }
 
