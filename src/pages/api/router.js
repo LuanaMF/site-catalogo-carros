@@ -1,5 +1,5 @@
 export async function get(endpoint) {
-    const response = await fetch(`/api/${endpoint}`, {
+    const response = await fetch(`../api/${endpoint}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
