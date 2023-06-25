@@ -1,29 +1,6 @@
 
 import { query } from "@/lib/db";
 
-
-
-function setCombustivelID(combustivel){
-  var id;
-  if(combustivel == 'Gasolina'){
-    id = 1;
-  }
-  if(combustivel == 'Flex'){
-    id = 2;
-  }
-  if(combustivel == 'Etanol'){
-    id = 3;
-  }
-  if(combustivel == 'Híbrido'){
-    id = 4;
-  }
-  if(combustivel == 'Diesel'){
-    id = 5;
-  }
-
-  return id;
-}
-
 //Função retorna carro especifico passado id
 async function getCarro(id){
     const sql = `
@@ -160,9 +137,7 @@ export default async function servicoCarro(req, res) {
 
       //Serviço que cadastra carro
       case 'cadastrarCarro':{
-        const idCombustivel = setCombustivelID(combustivel);
-
-        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, idCombustivel, cambio, vendido, devolvido, leiloado, gnv, obs);
+        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs);
         res.json({ result: result});
        
         break;
@@ -171,9 +146,8 @@ export default async function servicoCarro(req, res) {
       // Serviço que edita carro
       case'editarCarro' :{
         const { id } = req.body;
-        const idCombustivel = setCombustivelID(combustivel);
 
-        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, idCombustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id);
+        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id);
         res.json({ result: result});
        
         break;
