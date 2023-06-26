@@ -2,11 +2,19 @@ import {useEffect, useState} from "react";
 import { Modal, Button, Text, Input, Row, Checkbox, Grid, Spacer } from "@nextui-org/react";
 import { FaPlus, FaUserPlus } from 'react-icons/fa';
 import * as router from '@/pages/api/router';
+import { FcCheckmark } from "react-icons/fc";
 
 
-export default function ModalIncluirCliente({ editCliente, argCliente, open, close, mostrarBotao }) {
+export default function ModalIncluirCliente({argCliente, open, close, mostrarBotao }) {
 
   const [visible, setVisible] = useState(false);
+
+  const [alert, setAlert] = useState(false);
+    const [alertProps, setAlertProps] = useState({
+        mensagem: 'Cliente cadastrado com sucesso!',
+        icon: <FcCheckmark size={80}></FcCheckmark>
+    })
+    
   const handler = () => setVisible(true);
 
   const closeHandler = () => {
@@ -29,26 +37,33 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
     bairro: '',
     rua: '',
     numero: '',
-    fornecedor: '',
-    service: '',
+    fornecedor: 0,
+    service: 'cadastraCliente',
     telefone: '',
     cidade: ''
   });
 
 
     useEffect(() => {
-        if(editCliente){
-            cliente.service = 'editarCliente';
+        if(Object.keys(argCliente).length > 0){
             setCliente(argCliente);
         }
-    }, [editCliente]);
+    }, [argCliente]);
 
     
   async function handleOnClick() {
-    cliente.service = 'cadastraCliente';
+    if(Object.keys(argCliente).length > 0){
+        cliente.service = 'editarCliente';
+        
+    }
     try {
         const response = await router.apiPost(cliente, 'cliente');
-        
+        closeHandler()
+        if(Object.keys(argCliente).length > 0){
+            alertProps.mensagem = 'Cliente alterado com sucesso!'
+        }
+
+        setAlert(true);
     } catch (error) {
         console.log(error);
     }
@@ -56,6 +71,15 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
 
   return (
     <div>
+        {/* Modal que to usando como alert */}
+        <Modal noPadding open={alert} onClose={() => setAlert(false)} css={{h:'200px'}}>
+          <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+            {alertProps.icon}
+            <Text css={{marginBottom: '80px'}}>
+              {alertProps.mensagem}
+            </Text>
+          </Modal.Body>
+        </Modal>
       {mostrarBotao? <Button auto shadow onPress={handler}>
                 <FaPlus></FaPlus>
             </Button> 
@@ -73,7 +97,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
         <Modal.Header css={{justifyContent: 'center'}}>
             <Row justify="center">
                 <Text id='modal-title' b size={18}>
-                {editCliente? 'Editar cliente' : 'Cadastrar cliente'}
+                {Object.keys(argCliente).length > 0? 'Editar cliente' : 'Cadastrar cliente'}
                 </Text>
             </Row>
             
@@ -247,7 +271,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             </Grid.Container>
             <Spacer y={1}></Spacer>
           <Row justify="space-between">
-            <Checkbox isSelected={cliente.fornecedor == 1? true : false} onChange={(e) => cliente.fornecedor = e}>
+            <Checkbox isSelected={cliente.fornecedor == 1? true : false} onChange={(e) => e? cliente.fornecedor = 1 : cliente.fornecedor = 0}>
               <Text size={14}>Fornecedor</Text>
             </Checkbox>
           </Row>
@@ -257,7 +281,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             Cancelar
           </Button>
           <Button auto onPress={() =>  handleOnClick(cliente)}>
-            { editCliente? 'Salvar alterações' : 'Cadastrar cliente'}
+            { Object.keys(argCliente).length > 0? 'Salvar alterações' : 'Cadastrar cliente'}
           </Button>
         </Modal.Footer>
       </Modal>

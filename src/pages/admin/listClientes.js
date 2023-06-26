@@ -3,7 +3,7 @@ import { ActionButton } from "@/components/ActionButton";
 import { CiEdit } from "react-icons/ci";
 import { GoTrashcan } from "react-icons/go";
 import * as router from '@/pages/api/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalIncluirCliente from "@/components/ModalIncluirCliente";
 import { FcCheckmark } from "react-icons/fc";
 
@@ -57,12 +57,16 @@ export default function listClientes() {
 
   const [clienteEdit, setClienteEdit] = React.useState({});
 
-  const editaCliente = (cliente) => {
-    setOpenModal(true);
-    setClienteEdit(cliente)
+    const editaCliente = (cliente)  => {
+        setClienteEdit(cliente)
+    }
     
-  
-}
+    useEffect(()=> {
+        if(Object.keys(clienteEdit).length > 0){
+            setOpenModal(true)
+        }
+    }, [clienteEdit])
+
   const excluiCliente = (cliente) => {
     router.apiPost({service: 'delete', cpf: cliente.cpf}, 'cliente').then((value) => {
         setVisible(true)
@@ -258,7 +262,6 @@ export default function listClientes() {
         {clienteEdit? 
             <ModalIncluirCliente
                 mostrarBotao={false}
-                editCliente={true}
                 argCliente={clienteEdit}
                 open={openModal}
                 close={setOpenModal}

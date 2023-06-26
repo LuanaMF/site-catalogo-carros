@@ -2,17 +2,17 @@
 import { query } from "@/lib/db";
 
 
-async function cadastraCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email){
+async function cadastraCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor){
 
     const sql = `
         INSERT INTO cliente 
-            (cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email) 
+            (cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor) 
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `
   const response = await query({
     query: sql,
-    values: [cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email]
+    values: [cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor]
   })
 
   if (Object.keys(response).length > 0) {
@@ -23,7 +23,7 @@ async function cadastraCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, 
 
 }
 
-async function editarCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email){
+async function editarCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor){
 
     const sql = `
         UPDATE cliente 
@@ -38,13 +38,14 @@ async function editarCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, ci
             cidade = ?, 
             estado = ?, 
             telefone = ?, 
-            email = ?
+            email = ?,
+            fornecedor = ?
         WHERE
             cpf = ?
     `
   const response = await query({
     query: sql,
-    values: [cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, cpf]
+    values: [cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor, cpf]
   })
 
   if (Object.keys(response).length > 0) {
@@ -109,17 +110,17 @@ export default async function servicoCliente(req, res) {
       
       case 'cadastraCliente':{
 
-        const {cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email} = req.body;
-        const response = await cadastraCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email);
+        const {cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor} = req.body;
+        const response = await cadastraCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor);
         res.json({ result: response});
        
         break;
       }
      
       case'editarCliente' :{
-        const {cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email} = req.body;
+        const {cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor} = req.body;
 
-        const response = await editarCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email);
+        const response = await editarCliente(cpf, nomeCompleto, rg, cep, rua, numero, bairro, cidade, estado, telefone, email, fornecedor);
         res.json({ result: response});
         
         break;
