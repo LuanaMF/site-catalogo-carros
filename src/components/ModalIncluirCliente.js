@@ -4,7 +4,7 @@ import { FaPlus, FaUserPlus } from 'react-icons/fa';
 import * as router from '@/pages/api/router';
 
 
-export default function ModalIncluirCliente({ editCliente, argCliente, open, close }) {
+export default function ModalIncluirCliente({ editCliente, argCliente, open, close, mostrarBotao }) {
 
   const [visible, setVisible] = useState(false);
   const handler = () => setVisible(true);
@@ -55,7 +55,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
 
   return (
     <div>
-      {!open? <Button auto shadow onPress={handler}>
+      {mostrarBotao? <Button auto shadow onPress={handler}>
                 <FaPlus></FaPlus>
             </Button> 
         : ''}

@@ -23,7 +23,9 @@ export default function SelectCliente({ onChange, opcaoIncluir }) {
         if(value == 'incluir'){
             setOpenModal(true)
         }
-        
+        else if(value == 'semCliente'){
+          selectedDescription = 'Nenhum cliente registrado'
+        }
         else{
             clientes.forEach(element => {
                 if (value == element.cpf) {
@@ -69,14 +71,17 @@ export default function SelectCliente({ onChange, opcaoIncluir }) {
         <Dropdown.Item 
              key="incluir" color={'success'} icon={<FcPlus></FcPlus>}>Incluir cliente</Dropdown.Item> 
         : ''}
-        {clientes.map((item) => (
+        {clientes? clientes.map((item) => (
             <Dropdown.Item 
              key={item.cpf}>{item.nomeCompleto}</Dropdown.Item>
-        ))}
+        )): 
+          <Dropdown.Item 
+            key={'semCliente'}></Dropdown.Item>
+        }
         
       </Dropdown.Menu>
     </Dropdown>
-    <ModalIncluirCliente open={openModal} close={setOpenModal}></ModalIncluirCliente>
+    <ModalIncluirCliente open={openModal} close={setOpenModal} mostrarBotao={false}></ModalIncluirCliente>
     </>
   );
 }
