@@ -4,9 +4,9 @@ import * as router from '@/pages/api/router';
 import { FcPlus } from "react-icons/fc";
 import ModalIncluirCliente from "./ModalIncluirCliente";
 
-export default function SelectCliente({ onChange, opcaoIncluir }) {
+export default function SelectCliente({ onChange, opcaoIncluir, primeiraOpcao }) {
 
-  const [selected, setSelected] = React.useState(new Set(["Selecione o cliente"]));
+  const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
 
   const [clientes, setClientes] = React.useState([{
     cpf: '',
@@ -18,7 +18,7 @@ export default function SelectCliente({ onChange, opcaoIncluir }) {
   const selectedValue = React.useMemo(
     () => {
       const value = Array.from(selected).join(", ").replaceAll("_", " ");
-        let selectedDescription = "Selecione o cliente";
+        let selectedDescription = primeiraOpcao;
 
         if(value == 'incluir'){
             setOpenModal(true)

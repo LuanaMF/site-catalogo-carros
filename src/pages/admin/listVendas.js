@@ -4,7 +4,7 @@ import { CiEdit } from "react-icons/ci";
 import { GoTrashcan } from "react-icons/go";
 import * as router from '@/pages/api/router';
 import React, { useEffect, useState } from 'react';
-import ModalIncluirCliente from "@/components/ModalIncluirCliente";
+import ModalIncluirVenda from "@/components/ModalIncluirVenda";
 import { FcCheckmark } from "react-icons/fc";
 
 export default function listVendas() {
@@ -50,6 +50,18 @@ export default function listVendas() {
     
         fetchData();
     }, [vendas]);
+
+    const [vendaEdit, setVendaEdit] = React.useState({});
+
+    const editaVenda= (venda)  => {
+        setVendaEdit(venda)
+    }
+    
+    useEffect(()=> {
+        if(Object.keys(vendaEdit).length > 0){
+            setOpenModal(true)
+        }
+    }, [vendaEdit])
 
     const [visible, setVisible] = useState(false);
     const [alertProps, setAlertProps] = useState({
@@ -136,6 +148,13 @@ export default function listVendas() {
         return (
           <Row justify="center" align="center">
             <Col css={{ d: "flex" }}>
+              <Tooltip content="Editar venda" onClick={() => editaVenda(venda)}>
+                <ActionButton >
+                  <CiEdit size={20} fill="#979797" />
+                </ActionButton>
+              </Tooltip>
+            </Col>
+            <Col css={{ d: "flex" }}>
               <Tooltip
                 content="Excluir venda"
                 color="error"
@@ -217,14 +236,14 @@ export default function listVendas() {
             )}
         </Table.Body>
         </Table>
-        {/* {clienteEdit? 
-            <ModalIncluirCliente
+        {vendaEdit? 
+            <ModalIncluirVenda
                 mostrarBotao={false}
-                argCliente={clienteEdit}
+                argVenda={vendaEdit}
                 open={openModal}
                 close={setOpenModal}
-            ></ModalIncluirCliente>
-        : ''} */}
+            ></ModalIncluirVenda>
+        : ''}
     </>
   );
 }
