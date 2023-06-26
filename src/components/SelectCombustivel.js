@@ -4,7 +4,7 @@ import * as router from '@/pages/api/router';
 
 export default function SelectCombustivel({onChange}) {
 
-  const [selected, setSelected] = React.useState(new Set(["Selecione o combustível"]));
+  const [selected, setSelected] = React.useState(new Set(['']));
 
   const [combustiveis, setCombustiveis] = React.useState([{
     id: '',
@@ -12,7 +12,18 @@ export default function SelectCombustivel({onChange}) {
   }]);
 
   const selectedValue = React.useMemo(
-    () => Array.from(selected).join(", ").replaceAll("_", " "),
+    () => {
+      const value = Array.from(selected).join(", ").replaceAll("_", " ");
+      let selectedDescription = "Selecione o combustível";
+  
+      combustiveis.forEach(element => {
+        if (value == element.id) {
+          selectedDescription = element.descricao;
+        }
+      });
+  
+    return selectedDescription;
+    },
     [selected]
   );
   
@@ -32,7 +43,7 @@ export default function SelectCombustivel({onChange}) {
 
   return (
     <Dropdown>
-      <Dropdown.Button flat color="warning" css={{ tt: "capitalize" }}>
+      <Dropdown.Button flat color="warning">
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
@@ -47,7 +58,7 @@ export default function SelectCombustivel({onChange}) {
 
         {combustiveis.map((item) => (
             <Dropdown.Item 
-            id={item.id} key={item.descricao}>{item.descricao}</Dropdown.Item>
+             key={item.id}>{item.descricao}</Dropdown.Item>
         ))}
         
       </Dropdown.Menu>

@@ -6,7 +6,6 @@ import { Card, Text, Button, Spacer} from "@nextui-org/react";
 import Link from "next/link";
 import { FaWhatsapp} from 'react-icons/fa';
 
-
 function TelaCarro() {
     
   const [carro, setCarro] = useState({
