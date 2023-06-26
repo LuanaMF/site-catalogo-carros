@@ -110,7 +110,7 @@ async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilome
 
 async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs){
   const sql = `
-            INSERTO INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes)
+            INSERT INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `;
 
