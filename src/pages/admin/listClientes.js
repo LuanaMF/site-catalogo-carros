@@ -1,10 +1,11 @@
-import { Table, Row, Col, Tooltip, Loading, Text, Badge } from "@nextui-org/react";
+import { Table, Row, Col, Tooltip, Loading, Text, Badge, Modal } from "@nextui-org/react";
 import { ActionButton } from "@/components/ActionButton";
 import { CiEdit } from "react-icons/ci";
 import { GoTrashcan } from "react-icons/go";
 import * as router from '@/pages/api/router';
-import React from 'react';
-
+import React, { useState } from 'react';
+import ModalIncluirCliente from "@/components/ModalIncluirCliente";
+import { FcCheckmark } from "react-icons/fc";
 
 export default function listClientes() {
 
@@ -36,6 +37,12 @@ export default function listClientes() {
         fetchData();
     }, [clientes]);
 
+    const [visible, setVisible] = useState(false);
+    const [alertProps, setAlertProps] = useState({
+        mensagem: 'Cliente deletado com sucesso!',
+        icon: <FcCheckmark size={80}></FcCheckmark>
+    })
+
   const columns = [
     { name: "NOME", uid: "nomeCompleto" },
     { name: "CPF", uid: "cpf" },
@@ -46,10 +53,23 @@ export default function listClientes() {
     { name: "ACTIONS", uid: "actions" },
   ];
   
-  const editaCliente = () => {
+  const [openModal, setOpenModal] = React.useState(false);
 
-  }
+  const [clienteEdit, setClienteEdit] = React.useState({});
+
+  const editaCliente = (cliente) => {
+    setOpenModal(true);
+    setClienteEdit(cliente)
+    
   
+}
+  const excluiCliente = (cliente) => {
+    router.apiPost({service: 'delete', cpf: cliente.cpf}, 'cliente').then((value) => {
+        setVisible(true)
+    })
+    
+  }
+
   const renderCell = (cliente, columnKey) => {
 
     switch (columnKey) {
@@ -92,7 +112,7 @@ export default function listClientes() {
         return <Badge color={cor}>{tipo}</Badge>;
 
       case "end":
-        let enderecoPrincipal;
+        let enderecoPrincipal = 'Endereço não registrado'
         let enderecoSecundario;
 
         if(cliente.rua || cliente.numero){
@@ -123,6 +143,10 @@ export default function listClientes() {
                 }
             }
         }
+
+        if(enderecoSecundario && enderecoPrincipal == 'Endereço não registrado'){
+            enderecoPrincipal = ''
+        }
         
         return (
         <Col>
@@ -143,17 +167,17 @@ export default function listClientes() {
         return (
           <Row justify="center" align="center">
             <Col css={{ d: "flex" }}>
-              <Tooltip content="Edit user">
-                <ActionButton onClick={() => console.log("Edit user", cliente.cpf)}>
+              <Tooltip content="Editar cliente" onClick={() => editaCliente(cliente)}>
+                <ActionButton >
                   <CiEdit size={20} fill="#979797" />
                 </ActionButton>
               </Tooltip>
             </Col>
             <Col css={{ d: "flex" }}>
               <Tooltip
-                content="Delete user"
+                content="Excluir cliente"
                 color="error"
-                onClick={() => console.log("Delete user", cliente.cpf)}
+                onClick={() => excluiCliente(cliente)}
               >
                 <ActionButton>
                   <GoTrashcan size={20} color="#FF0080" />
@@ -170,7 +194,7 @@ export default function listClientes() {
   if (clientes[0].id === '') {
     return (
         <>
-             <style>{`
+            <style>{`
                 html, body {
                     background-color: white;
                  }
@@ -192,34 +216,54 @@ export default function listClientes() {
   }
 
   return (
-    <Table
-      aria-label="Example table with custom cells"
-      css={{
-        height: "auto",
-        minWidth: "100%",
-      }}
-      selectionMode="none"
-    >
-      <Table.Header columns={columns}>
-        {(column) => (
-          <Table.Column
-            key={column.uid}
-            hideHeader={column.uid === "actions"}
-            align={column.uid === "actions" ? "center" : "start"}
-          >
-            {column.name}
-          </Table.Column>
-        )}
-      </Table.Header>
-      <Table.Body items={clientes}>
-        {(item) => (
-          <Table.Row key={item.cpf}>
-            {(columnKey) => (
-              <Table.Cell key={columnKey}>{renderCell(item, columnKey)}</Table.Cell>
+    <>
+        {/* Modal que to usando como alert */}
+        <Modal noPadding open={visible} onClose={() => setVisible(false)} css={{h:'200px'}}>
+          <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+            {alertProps.icon}
+            <Text css={{marginBottom: '80px'}}>
+              {alertProps.mensagem}
+            </Text>
+          </Modal.Body>
+        </Modal>
+        <Table
+        aria-label="Example table with custom cells"
+        css={{
+            height: "auto",
+            minWidth: "100%",
+        }}
+        selectionMode="none"
+        >
+        <Table.Header columns={columns}>
+            {(column) => (
+            <Table.Column
+                key={column.uid}
+                hideHeader={column.uid === "actions"}
+                align={column.uid === "actions" ? "center" : "start"}
+            >
+                {column.name}
+            </Table.Column>
             )}
-          </Table.Row>
-        )}
-      </Table.Body>
-    </Table>
+        </Table.Header>
+        <Table.Body items={clientes}>
+            {(item) => (
+            <Table.Row key={item.cpf}>
+                {(columnKey) => (
+                <Table.Cell key={columnKey}>{renderCell(item, columnKey)}</Table.Cell>
+                )}
+            </Table.Row>
+            )}
+        </Table.Body>
+        </Table>
+        {clienteEdit? 
+            <ModalIncluirCliente
+                mostrarBotao={false}
+                editCliente={true}
+                argCliente={clienteEdit}
+                open={openModal}
+                close={setOpenModal}
+            ></ModalIncluirCliente>
+        : ''}
+    </>
   );
 }

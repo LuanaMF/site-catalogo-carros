@@ -35,6 +35,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
     cidade: ''
   });
 
+
     useEffect(() => {
         if(editCliente){
             cliente.service = 'editarCliente';
@@ -42,7 +43,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
         }
     }, [editCliente]);
 
-
+    
   async function handleOnClick() {
     cliente.service = 'cadastraCliente';
     try {
@@ -72,7 +73,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
         <Modal.Header css={{justifyContent: 'center'}}>
             <Row justify="center">
                 <Text id='modal-title' b size={18}>
-                Cadastro de cliente
+                {editCliente? 'Editar cliente' : 'Cadastrar cliente'}
                 </Text>
             </Row>
             
@@ -82,6 +83,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             <Grid.Container gap={1}>
                 <Grid xs={15}>
                     <Input
+                        aria-label="Nome"
                         clearable
                         bordered
                         fullWidth
@@ -89,20 +91,21 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
                         size="lg"
                         placeholder="Nome completo"
                         required
-                        defaultValue={cliente.nomeCompleto}
+                        value={cliente?.nomeCompleto}
                         onChange={(e) => cliente.nomeCompleto = e.target.value}
                     />
                 </Grid>
 
                 <Grid xs={15}>
                     <Input
+                        aria-label="Email"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Email"
-                        defaultValue={cliente.email}
+                        value={cliente?.email}
                         onChange={(e) => cliente.email = e.target.value}
                     />
                 </Grid>
@@ -111,6 +114,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             <Grid.Container gap={2}>
                 <Grid xs={4}>
                     <Input
+                        aria-label="cpf"
                         clearable
                         bordered
                         fullWidth
@@ -118,33 +122,35 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
                         size="lg"
                         placeholder="CPF"
                         required
-                        defaultValue={cliente.cpf}
+                        value={cliente?.cpf}
                         onChange={(e) => cliente.cpf = e.target.value}
                     />
                 </Grid>
                 
                 <Grid xs={4}>
                     <Input
+                    aria-label="RG"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="RG"
-                        defaultValue={cliente.rg}
+                        value={cliente?.rg}
                         onChange={(e) => cliente.rg = e.target.value}
                     />
                 </Grid>
 
                 <Grid xs={4}>
                     <Input
+                    aria-label="Tel"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Telefone"
-                        defaultValue={cliente.telefone}
+                        value={cliente?.telefone}
                         onChange={(e) => cliente.telefone = e.target.value}
                     />
                 </Grid>
@@ -154,25 +160,27 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             <Grid.Container gap={2} >
                 <Grid xs={4}>
                     <Input
+                    aria-label="Cep"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="CEP"
-                        defaultValue={cliente.cep}
+                        value={cliente?.cep}
                         onChange={(e) => cliente.cep = e.target.value}
                     />
                 </Grid>
                 <Grid xs={8}>
                     <Input
+                        aria-label="Estado"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Estado"
-                        defaultValue={cliente.estado}
+                        value={cliente?.estado}
                         onChange={(e) => cliente.estado = e.target.value}
                     />
                 </Grid>
@@ -181,25 +189,27 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             <Grid.Container gap={2} >
                 <Grid xs={6}>
                     <Input
+                        aria-label="Cidade"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Cidade"
-                        defaultValue={cliente.cidade}
+                        value={cliente?.cidade}
                         onChange={(e) => cliente.cidade = e.target.value}
                     />
                 </Grid>
                 <Grid xs={6}>
                     <Input
+                        aria-label="Bairro"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Bairro"
-                        defaultValue={cliente.bairro}
+                        value={cliente?.bairro}
                         onChange={(e) => cliente.bairro = e.target.value}
                     />
                 </Grid>
@@ -209,25 +219,27 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             <Grid.Container gap={2} >
                 <Grid xs={8}>
                     <Input
+                        aria-label="Rua"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Rua"
-                        defaultValue={cliente.rua}
+                        value={cliente?.rua}
                         onChange={(e) => cliente.rua = e.target.value}
                     />
                 </Grid>
                 <Grid xs={4}>
                     <Input
+                        aria-label="Numero"
                         clearable
                         bordered
                         fullWidth
                         color="primary"
                         size="lg"
                         placeholder="Número"
-                        defaultValue={cliente.numero}
+                        value={cliente?.numero}
                         onChange={(e) => cliente.numero = e.target.value}
                     />
                 </Grid>
@@ -235,7 +247,7 @@ export default function ModalIncluirCliente({ editCliente, argCliente, open, clo
             </Grid.Container>
             <Spacer y={1}></Spacer>
           <Row justify="space-between">
-            <Checkbox onChange={(e) => cliente.fornecedor = e}>
+            <Checkbox isSelected={cliente.fornecedor == 1? true : false} onChange={(e) => cliente.fornecedor = e}>
               <Text size={14}>Fornecedor</Text>
             </Checkbox>
           </Row>
