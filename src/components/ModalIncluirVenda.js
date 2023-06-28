@@ -188,7 +188,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                 </Grid>
                
                 <Grid xs={5}>
-                    <Select width={'500px'} css={{marginTop: '23px !important'}} options={tiposPagamento} primeiraOpcao={'Selecione o tipo de pagamento'} retorno={venda.tipo_pagamento}></Select>
+                    <Select width={'500px'} css={{marginTop: '23px !important'}} options={tiposPagamento} primeiraOpcao={'Selecione o tipo de pagamento'} retorno={(e) => venda.tipo_pagamento = e}></Select>
 
                 </Grid>
                     
@@ -197,12 +197,12 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
             <Grid.Container gap={1} justify="center" css={{marginTop: '5px'}}>
                 
                 <Grid xs={5}>
-                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'} retorno={venda.cpf_vendedor}></SelectCliente>
+                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'} retorno={(e) => venda.cpf_vendedor = e}></SelectCliente>
                     
                 </Grid>
                
                 <Grid xs={5}>
-                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o comprador'} retorno={venda.cpf_comprador}></SelectCliente>
+                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o comprador'} retorno={(e) => venda.cpf_comprador = e}></SelectCliente>
 
                 </Grid>
                     

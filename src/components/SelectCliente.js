@@ -65,7 +65,7 @@ export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, wi
         selectionMode="single"
         selectedValue={selected}
         onSelectionChange={setSelected}
-        onAction={(e) => retorno = e}
+        onAction={retorno}
 
         >
         {opcaoIncluir? 

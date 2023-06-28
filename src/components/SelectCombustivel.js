@@ -53,7 +53,7 @@ export default function SelectCombustivel({retorno}) {
         selectionMode="single"
         selectedValue={selected}
         onSelectionChange={setSelected}
-        onAction={(e) => retorno = e}
+        onAction={retorno}
         >
 
         {combustiveis.map((item) => (

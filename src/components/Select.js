@@ -23,6 +23,7 @@ export default function Select({ retorno, options, primeiraOpcao, width}) {
   
   const selectedValue = React.useMemo(() => {
     const value = Array.from(selected).join(", ").replaceAll("_", " ");
+    
     let selectedDescription = primeiraOpcao;
   
     options.forEach(element => {
@@ -46,7 +47,7 @@ export default function Select({ retorno, options, primeiraOpcao, width}) {
         selectionMode="single"
         selectedKeys={selected}
         onSelectionChange={setSelected}
-        onAction={(e) => retorno = e}
+        onAction={retorno}
         >
         {options.map((item) => (
             <Dropdown.Item 
