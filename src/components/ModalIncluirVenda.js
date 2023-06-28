@@ -29,7 +29,6 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
   };
 
   const [venda, setVenda] = useState({
-    id: '',
     data_venda: '',
     valor: '',
     kilometragem_saida: '',
@@ -38,9 +37,13 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     cpf_vendedor: '',
     observacoes: '',
     retorno: '',
-    service: 'cadastrarVenda'
+    service: 'cadastraVenda'
   });
 
+    const [dataHora] = useState({
+        data: '',
+        hora: ''
+    })
 
     const tiposPagamento = [
         {
@@ -62,29 +65,36 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     ]
 
     useEffect(() => {
-        if(Object.keys(argVenda).length > 0){
+        if(argVenda && Object.keys(argVenda).length > 0){
             setVenda(argVenda);
+            var data = new Date(venda.data_venda)
+            dataHora.data = data.toLocaleDateString()
+            dataHora.hora = data.toLocaleTimeString()
         }
     }, [argVenda]);
 
     
-  async function handleOnClick() {
-    if(Object.keys(argVenda).length > 0){
-        venda.service = 'editarVenda';
+    async function handleOnClick() {
         
-    }
-    try {
-        const response = await router.apiPost(venda, 'venda');
-        closeHandler()
-        if(Object.keys(argVenda).length > 0){
-            alertProps.mensagem = 'Venda alterada com sucesso!'
-        }
+        venda.data_venda = dataHora.data + ' ' + dataHora.hora + ':00'
+        console.log(venda);
+        // if( argVenda && Object.keys(argVenda).length > 0){
+        //     venda.service = 'editarVenda';
+            
+        // }
+        // try {
+        //     const response = await router.apiPost(venda, 'venda');
+        //     closeHandler()
+        //     if(argVenda && Object.keys(argVenda).length > 0){
+        //         alertProps.mensagem = 'Venda alterada com sucesso!'
+        //     }
 
-        setAlert(true);
-    } catch (error) {
-        console.log(error);
+        //     setAlert(true);
+        // } catch (error) {
+        //     console.log(error);
+        // }
+       
     }
-  }
 
   return (
     <div>
@@ -108,32 +118,38 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
         open={open? open : visible}
         onClose={closeHandler}
         css={{
-            h: '600px'
+            h: '610px'
         }}
       >
         <Modal.Header css={{justifyContent: 'center'}}>
             <Row justify="center">
                 <Text id='modal-title' b size={18}>
-                {Object.keys(argVenda).length > 0? 'Editar venda' : 'Cadastrar venda'}
+                {argVenda && Object.keys(argVenda).length > 0? 'Editar venda' : 'Cadastrar venda'}
                 </Text>
             </Row>
             
         </Modal.Header>
-        <Modal.Body justifyContent='center'>
+        <Modal.Body >
 
             <Grid.Container gap={1} justify="center">
                 <Grid xs={5} >
                     <Input 
                         css={{w: '500px'}}
-                        label="Date" 
+                        label="Data da venda" 
                         type="date" 
+                        onChange={(e) => {
+                            var dataArray = e.target.value.split('-');
+                            var data = dataArray[2] + '/' + dataArray[1] + '/' + dataArray[0];
+                            dataHora.data = data;
+                        }}
                     />
                 </Grid>
                 <Grid xs={5}>
                     <Input  
                         css={{w: '500px'}}
-                        label="Time" 
+                        label="Horario da venda" 
                         type="time" 
+                        onChange={(e) => dataHora.hora = e.target.value}
                     />
                 </Grid>
                 
@@ -144,33 +160,52 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                          css={{w: '500px'}}
                         label="Kilometragem de saída" 
                         type="number" 
+                        onChange={(e) => venda.kilometragem_saida = e.target.value}
                     />
                 </Grid>
                 <Grid xs={5}>
                     <Input 
                          css={{w: '500px'}}
                         label="Valor" 
-                        type="currency" 
+                        type="number" 
+                        step={'any'}
+                        onChange={(e) => venda.valor = e.target.value}
                     />
                 </Grid>
                 
             </Grid.Container>
-            <Spacer y={1}></Spacer>
-            <Grid.Container gap={1} justify="center" justifyContent='center'>
-                <Row>
-                    <Row>
-                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
-                        
-                    </Row>
-                    <Row>
-                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
-                        
-                    </Row>
-                    <Row>
-                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
-                        
-                    </Row>
-                </Row>
+           
+            <Grid.Container gap={1} justify="center" >
+                
+                <Grid xs={5}>
+                    <Input 
+                        css={{w: '500px'}}
+                        label="Retorno" 
+                        type="number" 
+                        step={'any'}
+                        onChange={(e) => venda.retorno = e.target.value}
+                    />
+                </Grid>
+               
+                <Grid xs={5}>
+                    <Select width={'500px'} css={{marginTop: '23px !important'}} options={tiposPagamento} primeiraOpcao={'Selecione o tipo de pagamento'} retorno={venda.tipo_pagamento}></Select>
+
+                </Grid>
+                    
+            </Grid.Container>
+           
+            <Grid.Container gap={1} justify="center" css={{marginTop: '5px'}}>
+                
+                <Grid xs={5}>
+                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'} retorno={venda.cpf_vendedor}></SelectCliente>
+                    
+                </Grid>
+               
+                <Grid xs={5}>
+                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o comprador'} retorno={venda.cpf_comprador}></SelectCliente>
+
+                </Grid>
+                    
             </Grid.Container>
             
             <Spacer y={1}></Spacer> 
@@ -179,6 +214,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                 color="primary"
                 labelPlaceholder="Observações"
                 rows={4}
+                onChange={(e) => venda.observacoes = e.target.value}
             />     
 
         </Modal.Body>
@@ -186,8 +222,8 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
           <Button auto flat color="error" onPress={closeHandler}>
             Cancelar
           </Button>
-          <Button auto onPress={() =>  handleOnClick(cliente)}>
-            { Object.keys(argVenda).length > 0? 'Salvar alterações' : 'Cadastrar venda'}
+          <Button auto onPress={handleOnClick}>
+            { argVenda && Object.keys(argVenda).length > 0? 'Salvar alterações' : 'Cadastrar venda'}
           </Button>
         </Modal.Footer>
       </Modal>

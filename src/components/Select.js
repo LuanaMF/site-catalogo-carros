@@ -17,7 +17,7 @@ import { Dropdown } from "@nextui-org/react";
 //   }
 //   ]
 
-export default function Select({ onChange, options, primeiraOpcao}) {
+export default function Select({ retorno, options, primeiraOpcao, width}) {
 
   const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
   
@@ -36,7 +36,7 @@ export default function Select({ onChange, options, primeiraOpcao}) {
   
   return (
     <Dropdown>
-      <Dropdown.Button flat color="warning">
+      <Dropdown.Button flat color="warning" css={{w: width? width : 'auto'}}>
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
@@ -46,7 +46,7 @@ export default function Select({ onChange, options, primeiraOpcao}) {
         selectionMode="single"
         selectedKeys={selected}
         onSelectionChange={setSelected}
-        onAction={onChange}
+        onAction={(e) => retorno = e}
         >
         {options.map((item) => (
             <Dropdown.Item 

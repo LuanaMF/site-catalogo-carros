@@ -2,7 +2,7 @@ import React from "react";
 import { Dropdown } from "@nextui-org/react";
 import * as router from '@/pages/api/router';
 
-export default function SelectCombustivel({onChange}) {
+export default function SelectCombustivel({retorno}) {
 
   const [selected, setSelected] = React.useState(new Set(['']));
 
@@ -53,7 +53,7 @@ export default function SelectCombustivel({onChange}) {
         selectionMode="single"
         selectedValue={selected}
         onSelectionChange={setSelected}
-        onAction={onChange}
+        onAction={(e) => retorno = e}
         >
 
         {combustiveis.map((item) => (

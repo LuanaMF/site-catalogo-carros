@@ -4,7 +4,7 @@ import { query } from "@/lib/db";
 
 async function cadastraVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor){
   const response = await query({
-    query: 'INSERT INTO venda (data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor) VALUES(STR_TO_DATE( ?, "%m-%d-%Y %H:%i:%s"), ?, ?, ?, ?, ?, ?, ?);',
+    query: 'INSERT INTO venda (data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor) VALUES(STR_TO_DATE( ?, "%d/%m/%Y %H:%i:%s"), ?, ?, ?, ?, ?, ?, ?);',
     values: [data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor]
   })
 

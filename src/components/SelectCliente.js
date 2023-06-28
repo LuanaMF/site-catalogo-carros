@@ -4,7 +4,7 @@ import * as router from '@/pages/api/router';
 import { FcPlus } from "react-icons/fc";
 import ModalIncluirCliente from "./ModalIncluirCliente";
 
-export default function SelectCliente({ onChange, opcaoIncluir, primeiraOpcao }) {
+export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, width }) {
 
   const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
 
@@ -29,7 +29,7 @@ export default function SelectCliente({ onChange, opcaoIncluir, primeiraOpcao })
         else{
             clientes.forEach(element => {
                 if (value == element.cpf) {
-                selectedDescription = element.nomeCompleto;
+                  selectedDescription = element.nomeCompleto;
                 }
             });    
         }
@@ -55,7 +55,7 @@ export default function SelectCliente({ onChange, opcaoIncluir, primeiraOpcao })
   return (
     <>
     <Dropdown>
-      <Dropdown.Button flat color="warning">
+      <Dropdown.Button flat color="warning" css = {{w: width? width : 'auto'}}>
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
@@ -65,7 +65,8 @@ export default function SelectCliente({ onChange, opcaoIncluir, primeiraOpcao })
         selectionMode="single"
         selectedValue={selected}
         onSelectionChange={setSelected}
-        onAction={onChange}
+        onAction={(e) => retorno = e}
+
         >
         {opcaoIncluir? 
         <Dropdown.Item 
