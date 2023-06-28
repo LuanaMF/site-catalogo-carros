@@ -103,7 +103,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
         : ''}
       <Modal
         closeButton
-        width="550px"
+        width="700px"
         aria-labelledby="modal-title"
         open={open? open : visible}
         onClose={closeHandler}
@@ -122,16 +122,16 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
         <Modal.Body justifyContent='center'>
 
             <Grid.Container gap={1} justify="center">
-                <Grid xs={4} >
+                <Grid xs={5} >
                     <Input 
-                        width="200px" 
+                        css={{w: '500px'}}
                         label="Date" 
                         type="date" 
                     />
                 </Grid>
-                <Grid xs={4}>
-                    <Input 
-                        width="200px" 
+                <Grid xs={5}>
+                    <Input  
+                        css={{w: '500px'}}
                         label="Time" 
                         type="time" 
                     />
@@ -139,38 +139,44 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                 
             </Grid.Container>
             <Grid.Container gap={1} justify="center">
-            <Grid xs={4}>
+                <Grid xs={5}>
                     <Input 
+                         css={{w: '500px'}}
                         label="Kilometragem de saída" 
                         type="number" 
                     />
                 </Grid>
-                <Grid xs={4}>
+                <Grid xs={5}>
                     <Input 
+                         css={{w: '500px'}}
                         label="Valor" 
                         type="currency" 
                     />
                 </Grid>
                 
             </Grid.Container>
-
-            <Grid.Container gap={1} justify="center">
-                <Grid xs={4}>
-                    <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
-                </Grid>
-                
-                <Grid xs={4}>
-                    <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o comprador'}></SelectCliente>
-                </Grid>
-                <Grid xs={4}>
-                    <Select options={tiposPagamento} primeiraOpcao={'Selecione o tipo de pagamento'}></Select>
-                </Grid>
+            <Spacer y={1}></Spacer>
+            <Grid.Container gap={1} justify="center" justifyContent='center'>
+                <Row>
+                    <Row>
+                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
+                        
+                    </Row>
+                    <Row>
+                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
+                        
+                    </Row>
+                    <Row>
+                        <SelectCliente opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'}></SelectCliente>
+                        
+                    </Row>
+                </Row>
             </Grid.Container>
             
-            <Spacer y={2}></Spacer> 
+            <Spacer y={1}></Spacer> 
             <Textarea
                 bordered
-                color="default"
+                color="primary"
                 labelPlaceholder="Observações"
                 rows={4}
             />     

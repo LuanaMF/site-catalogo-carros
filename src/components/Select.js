@@ -36,7 +36,7 @@ export default function Select({ onChange, options, primeiraOpcao}) {
   
   return (
     <Dropdown>
-      <Dropdown.Button flat color="warning" css={{ tt: "capitalize" }}>
+      <Dropdown.Button flat color="warning">
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
