@@ -45,6 +45,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
         hora: ''
     })
 
+    
     const tiposPagamento = [
         {
             value: 'Dinheiro',
@@ -67,32 +68,41 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     useEffect(() => {
         if(argVenda && Object.keys(argVenda).length > 0){
             setVenda(argVenda);
-            var data = new Date(venda.data_venda)
-            dataHora.data = data.toLocaleDateString()
-            dataHora.hora = data.toLocaleTimeString()
-        }
-    }, [argVenda]);
+        }   
+    }, [argVenda, dataHora]);
 
+    useEffect(() => {
+        if(venda.data_venda != ''){
+            var date = new Date(venda.data_venda)
+            const dataArray = date.toLocaleDateString().split('/');
+            const data = dataArray[2] + '-'  + dataArray[1] + '-' + dataArray[0];
+            dataHora.data = data;
+
+            dataHora.hora = date.toLocaleTimeString();
+        }   
+    }, [venda]);
+
+   
     
     async function handleOnClick() {
         
         venda.data_venda = dataHora.data + ' ' + dataHora.hora + ':00'
-        console.log(venda);
-        // if( argVenda && Object.keys(argVenda).length > 0){
-        //     venda.service = 'editarVenda';
+        
+        if( argVenda && Object.keys(argVenda).length > 0){
+            venda.service = 'editarVenda';
             
-        // }
-        // try {
-        //     const response = await router.apiPost(venda, 'venda');
-        //     closeHandler()
-        //     if(argVenda && Object.keys(argVenda).length > 0){
-        //         alertProps.mensagem = 'Venda alterada com sucesso!'
-        //     }
+        }
+        try {
+            const response = await router.apiPost(venda, 'venda');
+            closeHandler()
+            if(argVenda && Object.keys(argVenda).length > 0){
+                alertProps.mensagem = 'Venda alterada com sucesso!'
+            }
 
-        //     setAlert(true);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+            setAlert(true);
+        } catch (error) {
+            console.log(error);
+        }
        
     }
 
@@ -118,7 +128,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
         open={open? open : visible}
         onClose={closeHandler}
         css={{
-            h: '610px'
+            h: '640px'
         }}
       >
         <Modal.Header css={{justifyContent: 'center'}}>
@@ -137,6 +147,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         css={{w: '500px'}}
                         label="Data da venda" 
                         type="date" 
+                        value={dataHora.data}
                         onChange={(e) => {
                             var dataArray = e.target.value.split('-');
                             var data = dataArray[2] + '/' + dataArray[1] + '/' + dataArray[0];
@@ -149,6 +160,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         css={{w: '500px'}}
                         label="Horario da venda" 
                         type="time" 
+                        value={dataHora.hora}
                         onChange={(e) => dataHora.hora = e.target.value}
                     />
                 </Grid>
@@ -157,9 +169,10 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
             <Grid.Container gap={1} justify="center">
                 <Grid xs={5}>
                     <Input 
-                         css={{w: '500px'}}
+                        css={{w: '500px'}}
                         label="Kilometragem de saída" 
                         type="number" 
+                        value = {venda.kilometragem_saida}
                         onChange={(e) => venda.kilometragem_saida = e.target.value}
                     />
                 </Grid>
@@ -169,6 +182,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         label="Valor" 
                         type="number" 
                         step={'any'}
+                        value={venda.valor}
                         onChange={(e) => venda.valor = e.target.value}
                     />
                 </Grid>
@@ -183,27 +197,57 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         label="Retorno" 
                         type="number" 
                         step={'any'}
+                        value={venda.retorno}
                         onChange={(e) => venda.retorno = e.target.value}
                     />
                 </Grid>
                
                 <Grid xs={5}>
-                    <Select width={'500px'} css={{marginTop: '23px !important'}} options={tiposPagamento} primeiraOpcao={'Selecione o tipo de pagamento'} retorno={(e) => venda.tipo_pagamento = e}></Select>
-
+                    <Text size={14} >
+                        Tipo de pagamento
+                        <Spacer y={0.3}></Spacer>
+                        <Select 
+                        width={'250px'} 
+                        options={tiposPagamento} 
+                        primeiraOpcao={'Selecione o tipo de pagamento'} 
+                        retorno={(e) => venda.tipo_pagamento = e}
+                        opcaoSelecionada={venda.tipo_pagamento}
+                        
+                        ></Select>
+                    </Text>
+                    
                 </Grid>
                     
             </Grid.Container>
            
-            <Grid.Container gap={1} justify="center" css={{marginTop: '5px'}}>
+            <Grid.Container gap={1} justify="center" >
                 
                 <Grid xs={5}>
-                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o vendedor'} retorno={(e) => venda.cpf_vendedor = e}></SelectCliente>
-                    
+                    <Text size={14} >
+                        Vendedor
+                        <Spacer y={0.3}></Spacer>
+                        <SelectCliente 
+                            width={'250px'} 
+                            opcaoIncluir={true} 
+                            primeiraOpcao={'Selecione o vendedor'} 
+                            retorno={(e) => venda.cpf_vendedor = e}
+                            opcaoSelecionada={venda.cpf_vendedor}
+                        ></SelectCliente>
+                    </Text>
                 </Grid>
                
                 <Grid xs={5}>
-                    <SelectCliente width={'500px'} opcaoIncluir={true} primeiraOpcao={'Selecione o comprador'} retorno={(e) => venda.cpf_comprador = e}></SelectCliente>
-
+                    <Text size={14} >
+                        Comprador
+                        <Spacer y={0.3}></Spacer>
+                        <SelectCliente 
+                            width={'250px'} 
+                            opcaoIncluir={true} 
+                            primeiraOpcao={'Selecione o comprador'} 
+                            retorno={(e) => venda.cpf_comprador = e}
+                            opcaoSelecionada={venda.cpf_comprador}
+                        ></SelectCliente>
+                    </Text>
                 </Grid>
                     
             </Grid.Container>
@@ -214,6 +258,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                 color="primary"
                 labelPlaceholder="Observações"
                 rows={4}
+                value={venda.observacoes}
                 onChange={(e) => venda.observacoes = e.target.value}
             />     
 

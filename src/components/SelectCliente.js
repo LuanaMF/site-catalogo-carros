@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dropdown } from "@nextui-org/react";
 import * as router from '@/pages/api/router';
 import { FcPlus } from "react-icons/fc";
 import ModalIncluirCliente from "./ModalIncluirCliente";
 
-export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, width }) {
+export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, width, opcaoSelecionada }) {
 
-  const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
+  const [selected, setSelected] = React.useState(new Set([opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0? opcaoSelecionada : primeiraOpcao]));
 
   const [clientes, setClientes] = React.useState([{
     cpf: '',
@@ -15,10 +15,33 @@ export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, wi
 
   const [openModal, setOpenModal] = React.useState(false);
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await router.get('cliente');
+        setClientes(response.result);
+        if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
+          setSelected(opcaoSelecionada)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [clientes]);
+ 
   const selectedValue = React.useMemo(
     () => {
-      const value = Array.from(selected).join(", ").replaceAll("_", " ");
+        var value;
         let selectedDescription = primeiraOpcao;
+
+        if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
+          value = opcaoSelecionada;
+        }
+        else{
+          value = Array.from(selected).join(", ").replaceAll("_", " "); 
+        }
 
         if(value == 'incluir'){
             setOpenModal(true)
@@ -39,19 +62,7 @@ export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, wi
     [selected]
   );
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await router.get('cliente');
-        setClientes(response.result);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [clientes]);
-
+  
   return (
     <>
     <Dropdown>
@@ -63,14 +74,14 @@ export default function SelectCliente({ retorno, opcaoIncluir, primeiraOpcao, wi
         color="warning"
         disallowEmptySelection
         selectionMode="single"
-        selectedValue={selected}
+        selectedKeys={selected}
         onSelectionChange={setSelected}
         onAction={retorno}
-
+        
         >
         {opcaoIncluir? 
         <Dropdown.Item 
-             key="incluir" color={'success'} icon={<FcPlus></FcPlus>}>Incluir cliente</Dropdown.Item> 
+             key="incluir" color={'success'} icon={<FcPlus></FcPlus>} >Incluir cliente</Dropdown.Item> 
         : ''}
         {clientes? clientes.map((item) => (
             <Dropdown.Item 
