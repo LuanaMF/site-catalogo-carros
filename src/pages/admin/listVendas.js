@@ -6,6 +6,8 @@ import * as router from '@/pages/api/router';
 import React, { useEffect, useState } from 'react';
 import ModalIncluirVenda from "@/components/ModalIncluirVenda";
 import { FcCheckmark } from "react-icons/fc";
+import { CgFileDocument } from "react-icons/cg";
+
 
 export default function listVendas() {
 
@@ -14,29 +16,11 @@ export default function listVendas() {
         data_venda: '',
         valor: '',
         cpf_comprador: '',
-        cpf_vendedor: ''
+        cpf_vendedor: '',
+        nome_vendedor: '',
+        nome_comprador: ''
 
     }]);
-
-    const [nome, setNome] = React.useState({
-        comprador: '',
-        vendedor: ''
-    })
-
-    const getCliente = async (cpf, who) => {
-        try {
-            const response = await router.apiPost({cpf: cpf}, 'cliente');
-            if(who == 'c'){
-
-                nome.comprador = response.result[0].nomeCompleto
-            }
-            else{
-                nome.vendedor = response.result[0].nomeCompleto
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -97,13 +81,12 @@ export default function listVendas() {
             </Text>
         );
       case "cpf_vendedor":
-        getCliente(venda.cpf_vendedor, 'v')
             
         return (
             <Col>
             <Row>
               <Text b size={14} css={{ tt: "capitalize" }}>
-                {nome.vendedor}
+                {venda.nome_vendedor}
               </Text>
             </Row>
             <Row>
@@ -114,12 +97,12 @@ export default function listVendas() {
           </Col>
         );
       case "cpf_comprador":
-        getCliente(venda.cpf_comprador, 'c')
+       
         return (
             <Col>
             <Row>
               <Text b size={14} css={{ tt: "capitalize" }}>
-                {nome.comprador}
+                {venda.nome_comprador}
               </Text>
             </Row>
             <Row>
@@ -162,6 +145,17 @@ export default function listVendas() {
               >
                 <ActionButton>
                   <GoTrashcan size={20} color="#FF0080" />
+                </ActionButton>
+              </Tooltip>
+            </Col>
+            <Col css={{ d: "flex" }}>
+              <Tooltip
+                content="Gerar recibo"
+                color="gray"
+                onClick={() => ''}
+              >
+                <ActionButton>
+                  <CgFileDocument size={20} color="gray"/>
                 </ActionButton>
               </Tooltip>
             </Col>

@@ -29,6 +29,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
   };
 
   const [venda, setVenda] = useState({
+    id: null,
     data_venda: '',
     valor: '',
     kilometragem_saida: '',
@@ -40,8 +41,12 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     service: 'cadastraVenda'
   });
 
+    var dateAgora = new Date();
+    const dataArrayAgora = dateAgora.toLocaleDateString().split('/');
+    const dataAgora = dataArrayAgora[2] + '-'  + dataArrayAgora[1] + '-' + dataArrayAgora[0];
+
     const [dataHora] = useState({
-        data: '',
+        data: dataAgora,
         hora: ''
     })
 
@@ -85,12 +90,15 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
    
     
     async function handleOnClick() {
-        
-        venda.data_venda = dataHora.data + ' ' + dataHora.hora + ':00'
-        
+    
         if( argVenda && Object.keys(argVenda).length > 0){
+            venda.data_venda = dataHora.data + ' ' + dataHora.hora
             venda.service = 'editarVenda';
             
+        }
+        else{
+
+            venda.data_venda = dataHora.data + ' ' + dataHora.hora + ':00'
         }
         try {
             const response = await router.apiPost(venda, 'venda');
@@ -147,7 +155,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         css={{w: '500px'}}
                         label="Data da venda" 
                         type="date" 
-                        value={dataHora.data}
+                        initialValue={dataHora.data}
                         onChange={(e) => {
                             var dataArray = e.target.value.split('-');
                             var data = dataArray[2] + '/' + dataArray[1] + '/' + dataArray[0];
@@ -160,7 +168,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         css={{w: '500px'}}
                         label="Horario da venda" 
                         type="time" 
-                        value={dataHora.hora}
+                        initialValue={dataHora.hora}
                         onChange={(e) => dataHora.hora = e.target.value}
                     />
                 </Grid>
@@ -172,7 +180,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         css={{w: '500px'}}
                         label="Kilometragem de saída" 
                         type="number" 
-                        value = {venda.kilometragem_saida}
+                        initialValue = {venda.kilometragem_saida}
                         onChange={(e) => venda.kilometragem_saida = e.target.value}
                     />
                 </Grid>
@@ -182,7 +190,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         label="Valor" 
                         type="number" 
                         step={'any'}
-                        value={venda.valor}
+                        initialValue={venda.valor}
                         onChange={(e) => venda.valor = e.target.value}
                     />
                 </Grid>
@@ -197,7 +205,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                         label="Retorno" 
                         type="number" 
                         step={'any'}
-                        value={venda.retorno}
+                        initialValue={venda.retorno}
                         onChange={(e) => venda.retorno = e.target.value}
                     />
                 </Grid>
@@ -258,7 +266,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
                 color="primary"
                 labelPlaceholder="Observações"
                 rows={4}
-                value={venda.observacoes}
+                initialValue={venda.observacoes}
                 onChange={(e) => venda.observacoes = e.target.value}
             />     
 
