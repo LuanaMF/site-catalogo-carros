@@ -221,6 +221,7 @@ export default function listClientes() {
 
   return (
     <>
+      <NavbarCliente></NavbarCliente>
         {/* Modal que to usando como alert */}
         <Modal noPadding open={visible} onClose={() => setVisible(false)} css={{h:'200px'}}>
           <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>

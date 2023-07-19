@@ -1,16 +1,54 @@
-import { Table, Row, Col, Tooltip, Loading, Text, Badge, Modal } from "@nextui-org/react";
+import { Table, Row, Col, Tooltip, Loading, Text, Modal } from "@nextui-org/react";
 import { ActionButton } from "@/components/ActionButton";
 import { CiEdit } from "react-icons/ci";
-import { GoTrashcan } from "react-icons/go";
+import { GoTrash } from "react-icons/go";
 import * as router from '@/pages/api/router';
 import React, { useEffect, useState } from 'react';
-import ModalIncluirVenda from "@/components/ModalIncluirVenda";
+import  ModalIncluirVenda  from "@/components/ModalIncluirVenda";
 import { FcCheckmark } from "react-icons/fc";
 import { CgFileDocument } from "react-icons/cg";
+import NavbarCliente from "@/components/navBar";
 
 
 export default function listVendas() {
 
+  const gerarRecibo = async () => {
+    // Coloque aqui o conteúdo que deseja gerar como PDF
+    const content = `
+        <h1>Conteúdo para PDF</h1>
+        <p>Este é um parágrafo de exemplo.</p>
+    `;
+
+    try {
+      // Chama a API para gerar o PDF
+      const response = await fetch('/api/services/pdfService', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content }),
+      });
+
+      // Verifica se a resposta está OK
+      if (!response.ok) {
+        throw new Error('Erro ao gerar o PDF.');
+      }
+
+      // Cria um link para baixar o PDF
+      const pdfBlob = await response.blob();
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'recibo.pdf';
+      document.body.appendChild(link);
+      link.click();
+
+      // Limpa o link da memória após o download
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Erro ao gerar o PDF:', error);
+    }
+  };
     const [vendas, setVendas] = React.useState([{
         id: '',
         data_venda: '',
@@ -22,7 +60,7 @@ export default function listVendas() {
 
     }]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
           try {
             const response = await router.get('venda');
@@ -144,7 +182,7 @@ export default function listVendas() {
                 onClick={() => excluiVenda(venda)}
               >
                 <ActionButton>
-                  <GoTrashcan size={20} color="#FF0080" />
+                <GoTrash size={20} color="#FF0080" />
                 </ActionButton>
               </Tooltip>
             </Col>
@@ -152,7 +190,7 @@ export default function listVendas() {
               <Tooltip
                 content="Gerar recibo"
                 color="gray"
-                onClick={() => ''}
+                onClick={gerarRecibo}
               >
                 <ActionButton>
                   <CgFileDocument size={20} color="gray"/>
@@ -192,6 +230,7 @@ export default function listVendas() {
 
   return (
     <>
+      <NavbarCliente></NavbarCliente>
         {/* Modal que to usando como alert */}
         <Modal noPadding open={visible} onClose={() => setVisible(false)} css={{h:'200px'}}>
           <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>

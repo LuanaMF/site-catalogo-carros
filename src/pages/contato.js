@@ -89,6 +89,7 @@ export default function TelaContatos() {
 
   return (
     <>
+      <NavbarCliente></NavbarCliente> 
       <style>{`
         html, body {
           background-color: #f5b921;

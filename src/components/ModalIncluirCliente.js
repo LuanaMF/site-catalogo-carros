@@ -70,7 +70,8 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
   }
 
   return (
-    <div>
+    <>
+    
         {/* Modal que to usando como alert */}
         <Modal noPadding open={alert} onClose={() => setAlert(false)} css={{h:'200px'}}>
           <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
@@ -285,6 +286,7 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    
+    </>
   );
 }

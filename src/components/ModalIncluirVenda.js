@@ -45,7 +45,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     const dataArrayAgora = dateAgora.toLocaleDateString().split('/');
     const dataAgora = dataArrayAgora[2] + '-'  + dataArrayAgora[1] + '-' + dataArrayAgora[0];
 
-    const [dataHora] = useState({
+    const [dataHora, setDataHora] = useState({
         data: dataAgora,
         hora: ''
     })
@@ -73,22 +73,23 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     useEffect(() => {
         if(argVenda && Object.keys(argVenda).length > 0){
             setVenda(argVenda);
+
+            
         }   
     }, [argVenda, dataHora]);
 
     useEffect(() => {
-        if(venda.data_venda != ''){
-            var date = new Date(venda.data_venda)
+        var date = new Date(venda.data_venda)
             const dataArray = date.toLocaleDateString().split('/');
             const data = dataArray[2] + '-'  + dataArray[1] + '-' + dataArray[0];
-            dataHora.data = data;
+            const dataHora = {
+                data: data,
+                hora: date.toLocaleTimeString()
+            }
 
-            dataHora.hora = date.toLocaleTimeString();
-        }   
-    }, [venda]);
-
-   
-    
+            setDataHora(dataHora)
+    }, [venda.data_venda])
+       
     async function handleOnClick() {
     
         if( argVenda && Object.keys(argVenda).length > 0){
@@ -115,7 +116,8 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     }
 
   return (
-    <div>
+    <>
+    
         {/* Modal que to usando como alert */}
         <Modal noPadding open={alert} onClose={() => setAlert(false)} css={{h:'200px'}}>
           <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
@@ -280,6 +282,7 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    
+    </>
   );
 }
