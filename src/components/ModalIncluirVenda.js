@@ -35,7 +35,6 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
     kilometragem_saida: '',
     tipo_pagamento: '',
     cpf_comprador: '',
-    cpf_vendedor: '',
     observacoes: '',
     retorno: '',
     service: 'cadastraVenda'
@@ -232,20 +231,6 @@ export default function ModalIncluirVenda({argVenda, open, close, mostrarBotao }
            
             <Grid.Container gap={1} justify="center" >
                 
-                <Grid xs={5}>
-                    <Text size={14} >
-                        Vendedor
-                        <Spacer y={0.3}></Spacer>
-                        <SelectCliente 
-                            width={'250px'} 
-                            opcaoIncluir={true} 
-                            primeiraOpcao={'Selecione o vendedor'} 
-                            retorno={(e) => venda.cpf_vendedor = e}
-                            opcaoSelecionada={venda.cpf_vendedor}
-                        ></SelectCliente>
-                    </Text>
-                </Grid>
-               
                 <Grid xs={5}>
                     <Text size={14} >
                         Comprador

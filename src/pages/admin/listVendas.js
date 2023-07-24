@@ -6,49 +6,11 @@ import * as router from '@/pages/api/router';
 import React, { useEffect, useState } from 'react';
 import  ModalIncluirVenda  from "@/components/ModalIncluirVenda";
 import { FcCheckmark } from "react-icons/fc";
-import { CgFileDocument } from "react-icons/cg";
 import NavbarCliente from "@/components/navBar";
+import GeraRecibo from "@/pages/reciboGenerator";
 
 
 export default function listVendas() {
-
-  const gerarRecibo = async () => {
-    // Coloque aqui o conteúdo que deseja gerar como PDF
-    const content = `
-        <h1>Conteúdo para PDF</h1>
-        <p>Este é um parágrafo de exemplo.</p>
-    `;
-
-    try {
-      // Chama a API para gerar o PDF
-      const response = await fetch('/api/services/pdfService', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content }),
-      });
-
-      // Verifica se a resposta está OK
-      if (!response.ok) {
-        throw new Error('Erro ao gerar o PDF.');
-      }
-
-      // Cria um link para baixar o PDF
-      const pdfBlob = await response.blob();
-      const url = URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'recibo.pdf';
-      document.body.appendChild(link);
-      link.click();
-
-      // Limpa o link da memória após o download
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Erro ao gerar o PDF:', error);
-    }
-  };
     const [vendas, setVendas] = React.useState([{
         id: '',
         data_venda: '',
@@ -187,15 +149,8 @@ export default function listVendas() {
               </Tooltip>
             </Col>
             <Col css={{ d: "flex" }}>
-              <Tooltip
-                content="Gerar recibo"
-                color="gray"
-                onClick={gerarRecibo}
-              >
-                <ActionButton>
-                  <CgFileDocument size={20} color="gray"/>
-                </ActionButton>
-              </Tooltip>
+              <GeraRecibo></GeraRecibo>
+
             </Col>
           </Row>
         );

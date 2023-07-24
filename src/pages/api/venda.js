@@ -2,10 +2,10 @@
 import { query } from "@/lib/db";
 
 
-async function cadastraVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor){
+async function cadastraVenda(data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor){
   const response = await query({
-    query: 'INSERT INTO venda (data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor) VALUES(STR_TO_DATE( ?, "%Y-%m-%d %H:%i:%s"), ?, ?, ?, ?, ?, ?, ?);',
-    values: [data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor]
+    query: 'INSERT INTO venda (data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor) VALUES(STR_TO_DATE( ?, "%Y-%m-%d %H:%i:%s"), ?, ?, ?, ?, ?, ?, ?);',
+    values: [data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor]
   })
 
   if (Object.keys(response).length > 0) {
@@ -18,7 +18,10 @@ async function cadastraVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_
 
 async function getVendas(){
   const response = await query({
-    query: 'SELECT *, (SELECT nomeCompleto from cliente WHERE cpf_vendedor = cpf) AS nome_vendedor, (SELECT nomeCompleto FROM cliente WHERE cpf_comprador = cpf ) AS nome_comprador FROM venda',
+    query: `SELECT *, (SELECT c.nomeCompleto from cliente c, carro ca WHERE ca.id = id_carro AND ca.fornecedor = c.cpf) AS nome_vendedor, 
+    (SELECT c.cpf from cliente c, carro ca WHERE ca.id = id_carro AND ca.fornecedor = c.cpf) AS cpf_vendedor,
+    (SELECT nomeCompleto FROM cliente WHERE cpf_comprador = cpf ) 
+    AS nome_comprador FROM venda`,
     values: []
   })
 
@@ -32,7 +35,10 @@ async function getVendas(){
 
 async function getVendaPorId(id){
   const response = await query({
-    query: 'SELECT *, (SELECT nomeCompleto from cliente WHERE cpf_vendedor = cpf) AS nome_vendedor, (SELECT nomeCompleto FROM cliente WHERE cpf_comprador = cpf ) AS nome_comprador FROM venda WHERE id = ?',
+    query: `SELECT *, (SELECT c.nomeCompleto from cliente c, carro ca WHERE ca.id = id_carro AND ca.fornecedor = c.cpf) AS nome_vendedor, 
+    (SELECT c.cpf from cliente c, carro ca WHERE ca.id = id_carro AND ca.fornecedor = c.cpf) AS cpf_vendedor,
+    (SELECT nomeCompleto FROM cliente WHERE cpf_comprador = cpf ) 
+    AS nome_comprador FROM venda WHERE id = ?`,
     values: [id]
   })
 
@@ -58,17 +64,17 @@ async function excluiVenda(id){
   
 }
 
-async function editaVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, idVenda){
+async function editaVenda(data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, idVenda){
   const sql = `
   UPDATE venda SET
-    data_venda = ?, cpf_vendedor = ?, kilometragem_saida = ?, tipo_pagamento = ?, cpf_comprador = ?, observacoes = ?, retorno = ?,
+    data_venda = ?, kilometragem_saida = ?, tipo_pagamento = ?, cpf_comprador = ?, observacoes = ?, retorno = ?,
     valor = ?
   WHERE
     id = ?;
   `
   const response = await query({
     query: sql,
-    values: [data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, idVenda]
+    values: [data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, idVenda]
   })
 
   if (Object.keys(response).length > 0) {
@@ -91,8 +97,8 @@ export default async function servicoVenda(req, res) {
       //Serviço que altera senha
       case 'cadastraVenda':{
 
-        const {data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor} = req.body;
-        const response = await cadastraVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor);
+        const {data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor} = req.body;
+        const response = await cadastraVenda(data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor);
         res.json({ result: response});
        
         break;
@@ -100,8 +106,8 @@ export default async function servicoVenda(req, res) {
       //Serviço que altera senha
       case 'editarVenda':{
 
-        const {data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, id} = req.body;
-        const response = await editaVenda(data_venda, cpf_vendedor, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, id);
+        const {data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, id} = req.body;
+        const response = await editaVenda(data_venda, kilometragem_saida, tipo_pagamento, cpf_comprador, observacoes, retorno, valor, id);
         res.json({ result: response});
        
         break;
