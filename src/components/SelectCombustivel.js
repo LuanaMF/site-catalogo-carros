@@ -2,7 +2,7 @@ import React from "react";
 import { Dropdown } from "@nextui-org/react";
 import * as router from '@/pages/api/router';
 
-export default function SelectCombustivel({onChange}) {
+export default function SelectCombustivel({retorno, opcaoSelecionada}) {
 
   const [selected, setSelected] = React.useState(new Set(['']));
 
@@ -13,8 +13,15 @@ export default function SelectCombustivel({onChange}) {
 
   const selectedValue = React.useMemo(
     () => {
-      const value = Array.from(selected).join(", ").replaceAll("_", " ");
-      let selectedDescription = "Selecione o combustível";
+        var value;
+        let selectedDescription = 'Selecione o combustivel';
+
+        if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
+          value = opcaoSelecionada;
+        }
+        else{
+          value = Array.from(selected).join(", ").replaceAll("_", " "); 
+        }
   
       combustiveis.forEach(element => {
         if (value == element.id) {
@@ -53,7 +60,7 @@ export default function SelectCombustivel({onChange}) {
         selectionMode="single"
         selectedValue={selected}
         onSelectionChange={setSelected}
-        onAction={onChange}
+        onAction={retorno}
         >
 
         {combustiveis.map((item) => (

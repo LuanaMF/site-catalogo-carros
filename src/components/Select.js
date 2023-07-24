@@ -17,26 +17,32 @@ import { Dropdown } from "@nextui-org/react";
 //   }
 //   ]
 
-export default function Select({ onChange, options, primeiraOpcao}) {
+export default function Select({ retorno, options, primeiraOpcao, width, opcaoSelecionada}) {
 
   const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
   
   const selectedValue = React.useMemo(() => {
-    const value = Array.from(selected).join(", ").replaceAll("_", " ");
-    let selectedDescription = primeiraOpcao;
+        var value;
+        let selectedDescription = primeiraOpcao;
+        if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
+          value = opcaoSelecionada;
+        }
+        else{
+          value = Array.from(selected).join(", ").replaceAll("_", " "); 
+        }
   
-    options.forEach(element => {
-      if (value == element.value) {
-        selectedDescription = element.descricao;
-      }
-    });
+        options.forEach(element => {
+          if (value == element.value) {
+            selectedDescription = element.descricao;
+          }
+        });
   
     return selectedDescription;
   }, [selected]);
   
   return (
     <Dropdown>
-      <Dropdown.Button flat color="warning" css={{ tt: "capitalize" }}>
+      <Dropdown.Button flat color="warning" css={{w: width? width : 'auto'}}>
         {selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
@@ -46,7 +52,7 @@ export default function Select({ onChange, options, primeiraOpcao}) {
         selectionMode="single"
         selectedKeys={selected}
         onSelectionChange={setSelected}
-        onAction={onChange}
+        onAction={retorno}
         >
         {options.map((item) => (
             <Dropdown.Item 

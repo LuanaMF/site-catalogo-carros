@@ -45,21 +45,21 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
 
 
     useEffect(() => {
-        if(Object.keys(argCliente).length > 0){
+        if(argCliente && Object.keys(argCliente).length > 0){
             setCliente(argCliente);
         }
     }, [argCliente]);
 
     
   async function handleOnClick() {
-    if(Object.keys(argCliente).length > 0){
+    if( argCliente && Object.keys(argCliente).length > 0){
         cliente.service = 'editarCliente';
         
     }
     try {
         const response = await router.apiPost(cliente, 'cliente');
         closeHandler()
-        if(Object.keys(argCliente).length > 0){
+        if(argCliente && Object.keys(argCliente).length > 0){
             alertProps.mensagem = 'Cliente alterado com sucesso!'
         }
 
@@ -70,7 +70,8 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
   }
 
   return (
-    <div>
+    <>
+    
         {/* Modal que to usando como alert */}
         <Modal noPadding open={alert} onClose={() => setAlert(false)} css={{h:'200px'}}>
           <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
@@ -97,7 +98,7 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
         <Modal.Header css={{justifyContent: 'center'}}>
             <Row justify="center">
                 <Text id='modal-title' b size={18}>
-                {Object.keys(argCliente).length > 0? 'Editar cliente' : 'Cadastrar cliente'}
+                {argCliente && Object.keys(argCliente).length > 0? 'Editar cliente' : 'Cadastrar cliente'}
                 </Text>
             </Row>
             
@@ -281,10 +282,11 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
             Cancelar
           </Button>
           <Button auto onPress={() =>  handleOnClick(cliente)}>
-            { Object.keys(argCliente).length > 0? 'Salvar alterações' : 'Cadastrar cliente'}
+            { argCliente && Object.keys(argCliente).length > 0? 'Salvar alterações' : 'Cadastrar cliente'}
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    
+    </>
   );
 }

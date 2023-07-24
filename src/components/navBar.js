@@ -56,7 +56,7 @@ export default function NavbarCliente() {
                   minWidth: "100%",
                 }}
                 href="/"
-                active={isLinkActive("/")}
+              
               >
                 {item}
               </Link>

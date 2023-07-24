@@ -28,6 +28,7 @@ function TelaCarro() {
 
   return (
     <>
+        <NavbarCliente></NavbarCliente>
         <div>
             <div 
                 style={{
