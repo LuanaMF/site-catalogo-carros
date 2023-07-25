@@ -53,11 +53,30 @@ async function getImgs(id){
 
 }
 
+//Função retorna img principal de carro especifico passado id
+async function getImgPrincipal(id){
+  const sql = `
+            SELECT img FROM img_carro WHERE id_carro = ? AND principal = true
+        `;
+  
+  const response = await query({
+    query: sql,
+    values: [id]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+
+}
+
 // Retorna todos carros
 async function getAllCarros(){
   // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
   const sql = `
-    SELECT * FROM carro
+    SELECT *, (SELECT img FROM img_carro as img WHERE img.id_carro = c.id AND principal = 1)AS imgPrincipal FROM carro AS c;
   `
   const response = await query({
     query: sql,
@@ -164,6 +183,11 @@ export default async function servicoCarro(req, res) {
       }
       case 'getCombustiveis':{
         const result = await getCombustiveis();
+        res.json({ result: result});
+      }
+
+      case 'getImgPrincipal':{
+        const result = await getImgPrincipal(req.body.idCarro);
         res.json({ result: result});
       }
     }
