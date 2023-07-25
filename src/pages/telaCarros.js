@@ -1,6 +1,8 @@
-import { Card, Grid, Row, Text } from "@nextui-org/react";
+import { Card, Grid, Row, Text, Link } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import * as router from '@/pages/api/router';
+import NavbarCliente from '@/components/navBar';
+
 
 export default function App() {
 
@@ -32,32 +34,37 @@ export default function App() {
     });
 
   return (
+    <>
+    <NavbarCliente></NavbarCliente>
     <Grid.Container gap={2} justify="flex-start">
       {carros.map((item, index) => (
         <Grid xs={6} sm={3} key={index}>
-          <Card isPressable>
-            <Card.Body css={{ p: 0, w: 'auto'}} >
-              <Card.Image
-                src={`data:image/png;base64,${item.imgPrincipal}`}
-                objectFit="contain"
-                width="100%"
-                height='100%'
-                alt={item.marca}
-                autoResize
-              />
-            </Card.Body>
-            <Card.Divider />
-            <Card.Footer css={{ justifyItems: "flex-start" }}>
-              <Row wrap="wrap" justify="space-between" align="center">
-                <Text b>{item.marca + ', ' +item.ano_modelo}</Text>
-                <Text css={{ color: "$accents7", fontWeight: "$semibold", fontSize: "$sm" }}>
-                  {formatter.format(item.valor)}
-                </Text>
-              </Row>
-            </Card.Footer>
-          </Card>
+          <Link block href={"telaCarro/"+item.id}>
+            <Card isPressable isHoverable css={{h: '300px'}}>
+              <Card.Body css={{ p: 0}} >
+                <Card.Image
+                  src={`data:image/png;base64,${item.imgPrincipal}`}
+                  objectFit="contain"
+                  width="100%"
+                  height='100%'
+                  alt={item.marca}
+                  autoResize
+                />
+              </Card.Body>
+              <Card.Divider />
+              <Card.Footer css={{ justifyItems: "flex-start" }}>
+                <Row wrap="wrap" justify="space-between" align="center">
+                  <Text b>{item.marca + ', ' +item.ano_modelo}</Text>
+                  <Text css={{ color: "$accents7", fontWeight: "$semibold", fontSize: "$sm" }}>
+                    {formatter.format(item.valor)}
+                  </Text>
+                </Row>
+              </Card.Footer>
+            </Card>
+          </Link>
         </Grid>
       ))}
     </Grid.Container>
+    </>
   );
 }

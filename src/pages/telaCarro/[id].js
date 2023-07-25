@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import * as router from '../api/router';
-import { Card, Text, Button, Spacer} from "@nextui-org/react";
+import { Card, Text, Button, Image} from "@nextui-org/react";
 import Link from "next/link";
 import { FaWhatsapp} from 'react-icons/fa';
+import NavbarCliente from '@/components/navBar';
+import { useRouter } from 'next/router';
 
 function TelaCarro() {
     
@@ -13,18 +15,22 @@ function TelaCarro() {
     imagens: [],
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await router.apiPost({ id: 1 }, 'carro');
-        setCarro(response);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const { query } = useRouter();
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (query.id != undefined) {
+        const fetchData = async () => {
+            try {
+              const response = await router.apiPost({ id: query.id }, 'carro');
+              setCarro(response);
+            } catch (error) {
+              console.log(error);
+            }
+          };
+      
+          fetchData();
+    }
+  }, [query.id]);
 
   return (
     <>
@@ -32,7 +38,8 @@ function TelaCarro() {
         <div>
             <div 
                 style={{
-                    display: 'flex',
+                    display: 'block',
+                    marginTop: '100px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginLeft: '100px',
@@ -40,17 +47,16 @@ function TelaCarro() {
                     gap: '0px'
                 }}
             >
-                <Carousel dynamicHeight width='55%'>
+                <Carousel dynamicHeight width='55%' style={{maxHeight: '100px'}}>
                     {carro.imagens.map((item, index) => (
                         <div key={index}>
-                            <img src={`data:image/png;base64,${item.img}`} />
+                            <Image objectFit='contain' src={`data:image/png;base64,${item.img}`} />
                         </div>
                     ))}
                 </Carousel>
                 
-            </div>
-            <div>
-                <Card css={{ w: "400px", h: 'auto', marginTop: '-750px', marginLeft: '1000px' }}>
+                <div>
+                <Card css={{ w: '55%' }}>
                     <Card.Header>
                         <Text>Informações</Text>
                     </Card.Header>
@@ -109,6 +115,8 @@ function TelaCarro() {
                     </Card.Footer>
                 </Card>
             </div>
+            </div>
+           
         </div>
     </>
   );

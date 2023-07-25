@@ -4,6 +4,7 @@ import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { useState } from "react";
 import {FcCheckmark, FcCancel} from 'react-icons/fc'
 import Link from "next/link";
+import NavbarCliente from '@/components/navBar';
 
 const theme = createTheme({
   type: "light",

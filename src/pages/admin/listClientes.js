@@ -6,6 +6,7 @@ import * as router from '@/pages/api/router';
 import React, { useEffect, useState } from 'react';
 import ModalIncluirCliente from "@/components/ModalIncluirCliente";
 import { FcCheckmark } from "react-icons/fc";
+import NavbarCliente from '@/components/navBar';
 
 export default function listClientes() {
 
