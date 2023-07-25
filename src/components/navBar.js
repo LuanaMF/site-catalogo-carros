@@ -34,7 +34,7 @@ export default function NavbarCliente() {
           <Navbar.Link isActive={isLinkActive("/")} href="/">
             Sobre nós
           </Navbar.Link>
-          <Navbar.Link isActive={isLinkActive("/carros")} href="carros">
+          <Navbar.Link isActive={isLinkActive("/telaCarros")} href="../telaCarros">
             Carros
           </Navbar.Link>
           <Navbar.Link isActive={isLinkActive("/contato")} href="contato">
