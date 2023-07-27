@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import  ModalIncluirVenda  from "@/components/ModalIncluirVenda";
 import { FcCheckmark } from "react-icons/fc";
 import NavbarCliente from "@/components/navBar";
-import GeraRecibo from "@/pages/admin/reciboVenda";
 import { CgFileDocument } from "react-icons/cg";
 import Link from "next/link";
 
@@ -152,7 +151,7 @@ export default function listVendas() {
             </Col>
             <Col css={{ d: "flex" }}>
               <Link
-                href={'reciboVenda'}
+                href={'recibo/'+venda.id}
               >
                 <ActionButton>
                   <CgFileDocument size={20} color="gray" />

@@ -1,11 +1,32 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import jsPDF from 'jspdf';
-import TemplateRecibo from '../../templates/templateRecibo';
+import TemplateRecibo from '../../../templates/templateRecibo';
 import { Button, Text, Spacer } from '@nextui-org/react';
+import { useRouter } from 'next/router';
+import * as router from '@/pages/api/router'
 
+function GeraRecibo() {
 
+	const { query } = useRouter();
+    
+	const [venda, setVenda ] = useState({});
 
-function GeraRecibo({ venda }) {
+	useEffect(() => {
+		if (query.id != undefined) {
+			const fetchData = async () => {
+				try {
+					const response = await router.apiPost({ id: query.id }, '../../api/venda');
+					setVenda(response.result);
+				} catch (error) {
+				  console.log(error);
+				}
+			};
+			
+			fetchData();
+		}
+
+	}, [query.id]);
+
 	const reportTemplateRef = useRef(null);
 
 	const handleGeneratePdf = () => {
@@ -19,11 +40,11 @@ function GeraRecibo({ venda }) {
 
 		doc.html(reportTemplateRef.current, {
 			async callback(doc) {
-				await doc.save('document');
+				await doc.save('recibo');
 			},
 		});
 	};
-
+    
 	return (
 		<>
 		<div style={{display: 'grid', marginTop: '10px'}}>
@@ -36,7 +57,12 @@ function GeraRecibo({ venda }) {
 		<div style={{marginLeft: '450px'}}>
 			
             <div ref={reportTemplateRef}>
-                <TemplateRecibo />
+				{
+				  venda[0] != undefined? 
+				  <TemplateRecibo venda={venda[0]}/> 
+				  : ''
+				}
+                
             </div>
 
 		</div>
