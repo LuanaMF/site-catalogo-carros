@@ -1,7 +1,8 @@
-import { Text, Grid, Progress, Button, Spacer } from "@nextui-org/react";
+import SelectCliente from "@/components/SelectCliente";
+import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea} from "@nextui-org/react";
 import { useState } from "react";
-import {BsCarFront, BsImageFill} from 'react-icons/bs';
-import {TfiWrite} from 'react-icons/tfi';
+import {BsCarFront, BsImageFill, BsPersonCircle} from 'react-icons/bs';
+
 
 
 export default function CadastroCarro() {
@@ -17,7 +18,6 @@ export default function CadastroCarro() {
         fornecedor: '',
         valor: '',
         gnv: '',
-        //info adc:
         vendido: '',
         devolvido: '',
         renavam: '',
@@ -26,23 +26,187 @@ export default function CadastroCarro() {
         observacoes: ''
     });
 
-
-    function InformacoesBasicas() {
+    const [vendedorCadastrado, setVendedorCadastrado] = useState('')
+    function Carro() {
         return (
             <div style={{display: 'flex', justifyContent: 'center'}}>
-    
-                <h2>Informações Basicas</h2>    
+                
+                <Card>
+                    <Card.Header css={{justifyContent: 'center'}}>
+                        <Text b color='$gray800' size={25}>Dados do carro</Text>  
+                        
+                    </Card.Header>
+
+                    <Card.Divider></Card.Divider>
+
+                    <Card.Body >
+                        <Grid.Container gap={2}>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="marca"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Marca"
+                                    required
+                                    onChange={(e) => carro.marca = e.target.value}
+                                />
+                            </Grid>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="modelo/versao"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Modelo/Versão"
+                                    required
+                                    onChange={(e) => carro.modelo_versao = e.target.value}
+                                />
+                            </Grid>
+                        </Grid.Container>
+                        <Grid.Container gap={2}>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="anoFabricacao"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Ano de Fabricação"
+                                    required
+                                    onChange={(e) => carro.ano_fabricacao = e.target.value}
+                                />
+                            </Grid>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="ano modelo"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Ano modelo"
+                                    required
+                                    onChange={(e) => carro.ano_modelo = e.target.value}
+                                />
+                            </Grid>
+                        </Grid.Container>
+                        <Grid.Container gap={2}>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="quilometragem"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Quilometragem"
+                                    required
+                                    onChange={(e) => carro.quilometragem = e.target.value}
+                                />
+                            </Grid>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="valor"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Valor"
+                                    required
+                                    onChange={(e) => carro.valor = e.target.value}
+                                />
+                            </Grid>
+                        </Grid.Container>
+                        <Grid.Container gap={2}>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="renavam"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Renavam"
+                                    required
+                                    onChange={(e) => carro.renavam = e.target.value}
+                                />
+                            </Grid>
+                            <Grid xs={6}>
+                                <Input
+                                    aria-label="chassi"
+                                    clearable
+                                    bordered
+                                    fullWidth
+                                    color="primary"
+                                    size="lg"
+                                    placeholder="Chassi"
+                                    required
+                                    onChange={(e) => carro.chassi = e.target.value}
+                                />
+                            </Grid>
+                        </Grid.Container>
+                        <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
+                            <Grid xs={2.5}>
+                                <Checkbox css={{marginLeft: '18px'}} size="sm"
+                                    onChange={(e) => e? carro.gnv = 1 : carro.gnv = 0}
+                                >GNV</Checkbox>
+                            </Grid>
+                            <Grid xs={3}>
+                                <Checkbox onChange={(e) => e? carro.vendido = 1 : carro.vendido = 0}
+                                size="sm">Vendido</Checkbox>
+                            </Grid>
+                            <Grid xs={3}>
+                                <Checkbox size="sm"
+                                    onChange={(e) => e? carro.devolvido = 1 : carro.devolvido = 0}
+                                >Devolvido</Checkbox>
+                            </Grid >
+                            <Grid xs={3}>
+                                <Checkbox size="sm"
+                                    onChange={(e) => e? carro.leiloado = 1 : carro.leiloado = 0}
+                                >Leiloado</Checkbox>
+                            </Grid>
+                        </Grid.Container>
+                        <Textarea
+                            aria-label="observações"
+                            clearable
+                            bordered
+                            fullWidth
+                            color="primary"
+                            size="lg"
+                            placeholder="Observações"
+                            required
+                            css={{marginTop: '15px'}}
+                            onChange={(e) => carro.observacoes = e.target.value}
+                        />
+                    </Card.Body>
+
+                </Card>
             </div>
         )
         
     }
     
-    function InformacoesAdicionais() {
+    function Fornecedor() {
         return (
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-    
-                <h2>Informações Adicionais</h2>    
-            </div>
+            <>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+        
+                    <Checkbox size="sm"
+                        onChange={setVendedorCadastrado}
+                    >O vendedor deste carro já é cadastrado no sistema?</Checkbox>
+                    
+                </div>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    {vendedorCadastrado? <SelectCliente></SelectCliente> : ''}
+                </div>
+            </>
         )
     }
     
@@ -80,7 +244,7 @@ export default function CadastroCarro() {
             stepperProps.iconColor2 = 'gray'
             stepperProps.buttonColor3 = '$gray400'
 
-            return <InformacoesBasicas/>;
+            return <Carro/>;
           case 2: 
 
             stepperProps.lineColor2 = 'gray'
@@ -91,7 +255,7 @@ export default function CadastroCarro() {
             stepperProps.iconColor1 = 'white'
             stepperProps.buttonColor2 = 'warning'
 
-            return <InformacoesAdicionais/>;
+            return <Fornecedor/>;
           case 3: 
 
             stepperProps.lineColor2 = '#F5A524'
@@ -151,7 +315,7 @@ export default function CadastroCarro() {
                     }}
                     size="md"
                     color={stepperProps.buttonColor2}   
-                    icon={<TfiWrite size={25} color={stepperProps.iconColor1}></TfiWrite>}
+                    icon={<BsPersonCircle size={25} color={stepperProps.iconColor1}></BsPersonCircle>}
                 />
                 <div
                     style={{
@@ -179,7 +343,7 @@ export default function CadastroCarro() {
              {getSectionComponent()}
             </div>
 
-            <div style={{display: 'flex', justifyContent: 'center', marginTop: '400px'}}>
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: '45px'}}>
                 <Button onPress={() => setActiveStep(activeStep + 1)}>{activeStep != 3? 'Próximo' : 'Finalizar cadastro'}</Button>
                 <Spacer y={1}></Spacer>
                 {activeStep > 1? 
