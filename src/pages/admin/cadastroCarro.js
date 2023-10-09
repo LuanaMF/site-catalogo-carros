@@ -1,8 +1,8 @@
 import SelectCliente from "@/components/SelectCliente";
 import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea} from "@nextui-org/react";
 import { useState } from "react";
-import {BsCarFront, BsImageFill, BsPersonCircle} from 'react-icons/bs';
-
+import {BsCarFront, BsImageFill, BsPersonCircle, BsImage} from 'react-icons/bs';
+import ModalIncluirCliente from "@/components/ModalIncluirCliente";
 
 
 export default function CadastroCarro() {
@@ -27,6 +27,9 @@ export default function CadastroCarro() {
     });
 
     const [vendedorCadastrado, setVendedorCadastrado] = useState('')
+
+    const [openModal, setOpenModal] = useState('')
+
     function Carro() {
         return (
             <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -197,24 +200,110 @@ export default function CadastroCarro() {
         return (
             <>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-        
-                    <Checkbox size="sm"
-                        onChange={setVendedorCadastrado}
-                    >O vendedor deste carro já é cadastrado no sistema?</Checkbox>
-                    
+                    <Grid.Container gap={2} >
+                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+
+                            <Text blockquote>O vendedor deste carro já é cadastrado no sistema?</Text>
+                            
+                        </Grid>
+                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                <Button color="secondary" auto onPress={() => setVendedorCadastrado(true)}>
+                                    Sim
+                                </Button>
+                                <Spacer x={0.5} />
+                                <Button color="secondary" auto onPress={() => setOpenModal(true)}>
+                                    Não
+                                </Button>
+                        </Grid>
+                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            
+
+                            {vendedorCadastrado? 
+
+                                <SelectCliente primeiraOpcao={"Selecione o vendedor"}></SelectCliente> 
+                            : 
+                                
+                            ''}
+
+                        </Grid>
+
+                    </Grid.Container>
                 </div>
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-                    {vendedorCadastrado? <SelectCliente></SelectCliente> : ''}
-                </div>
+                <ModalIncluirCliente
+                    mostrarBotao={false}
+                    open={openModal}
+                    close={setOpenModal}
+                ></ModalIncluirCliente>
+
             </>
         )
     }
     
+    const [mainImagePreview, setMainImagePreview] = useState(null);
+    const [secondaryImagePreviews, setSecondaryImagePreviews] = useState(Array(4).fill(null));
+
+    const handleMainImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setMainImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+        } else {
+        setMainImagePreview(null);
+        }
+    };
+
+    const handleSecondaryImageChange = (e, index) => {
+        const file = e.target.files[0];
+        if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const newPreviews = [...secondaryImagePreviews];
+            newPreviews[index] = e.target.result;
+            setSecondaryImagePreviews(newPreviews);
+        };
+        reader.readAsDataURL(file);
+        } else {
+        const newPreviews = [...secondaryImagePreviews];
+        newPreviews[index] = null;
+        setSecondaryImagePreviews(newPreviews);
+        }
+    };
+
     function Imagens() {
         return (
             <div style={{display: 'flex', justifyContent: 'center'}}>
-    
-                <h2>Imagens</h2>    
+                
+                <div className="file-upload">
+                    <label htmlFor="main-image">
+                        <div className="upload-box" style={{marginLeft: '35px', width: '600px'}}>
+                        <BsImage color="gray"></BsImage>
+                        <input
+                            type="file"
+                            id="main-image"
+                            accept="image/*"
+                            onChange={handleMainImageChange}
+                        />
+                        {mainImagePreview && <img src={mainImagePreview} alt="Preview" />}
+                        </div>
+                    </label>
+                <div className="secondary-images">
+                    {Array.from({ length: 4 }, (_, index) => (
+                    <label key={index} htmlFor={`secondary-image${index + 1}`} className="upload-box">
+                        <BsImage color="gray"></BsImage>
+                        <input
+                        type="file"
+                        id={`secondary-image${index + 1}`}
+                        accept="image/*"
+                        onChange={(e) => handleSecondaryImageChange(e, index)}
+                        />
+                        {secondaryImagePreviews[index] && <img src={secondaryImagePreviews[index]} alt="Preview" />}
+                    </label>
+                    ))}
+                </div>
+             </div>
             </div>
         )
     }

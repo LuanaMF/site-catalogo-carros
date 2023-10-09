@@ -1,0 +1,51 @@
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .upload-box {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .upload-box span {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .upload-box input[type="file"] {
+    display: none;
+  }
+  
+  .upload-box:hover {
+    border-color: gray;
+  }
+  
+  .secondary-images {
+    display: flex;
+    gap: 20px;
+  }
+
+/* Estilo para os quadradinhos de upload */
+.upload-box {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    position: relative; /* Para garantir que as imagens fiquem dentro do quadradinho */
+    width: 150px; /* Defina a largura desejada para o quadradinho */
+    height: 150px; /* Defina a altura desejada para o quadradinho */
+    overflow: hidden; /* Esconde qualquer parte da imagem que se estender além do quadradinho */
+  }
+  
+  /* Estilo para as imagens dentro dos quadradinhos */
+  .upload-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Isso fará a imagem se ajustar ao quadradinho, recortando partes se necessário */
+    display: block;
+  }
+  
