@@ -135,10 +135,10 @@ async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quil
 
   const response = await query({
     query: sql,
-    values: [id]
+    values: [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs]
   })
   if (Object.keys(response).length > 0) {
-    return response[marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs]
+    return response[0]
   } else {
     return null
   }

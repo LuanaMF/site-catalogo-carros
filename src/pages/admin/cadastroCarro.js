@@ -3,6 +3,7 @@ import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea} from "@nex
 import { useState } from "react";
 import {BsCarFront, BsImageFill, BsPersonCircle, BsImage} from 'react-icons/bs';
 import ModalIncluirCliente from "@/components/ModalIncluirCliente";
+import * as router from '@/pages/api/router';
 
 
 export default function CadastroCarro() {
@@ -23,12 +24,31 @@ export default function CadastroCarro() {
         renavam: '',
         chassi: '', 
         leiloado: '',
-        observacoes: ''
+        observacoes: '',
+        service: 'cadastrarCarro'
     });
 
-    const [vendedorCadastrado, setVendedorCadastrado] = useState('')
+    const [imgs, setImgs] = useState([{}])
 
     const [openModal, setOpenModal] = useState('')
+
+    async function saveCarro() {
+        
+        try {
+            const responseCarro = await router.apiPost(carro, 'carro');
+            
+            console.log(responseCarro.result)
+
+            //const responseImg = await router.apiPost(carro, 'carro');
+            // if(argCliente && Object.keys(argCliente).length > 0){
+            //     alertProps.mensagem = 'Cliente alterado com sucesso!'
+            // }
+    
+            
+        } catch (error) {
+            console.log(error);
+        }
+      }
 
     function Carro() {
         return (
@@ -54,6 +74,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Marca"
                                     required
+                                    initialValue={carro.marca}
                                     onChange={(e) => carro.marca = e.target.value}
                                 />
                             </Grid>
@@ -67,6 +88,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Modelo/Versão"
                                     required
+                                    initialValue={carro.modelo_versao}
                                     onChange={(e) => carro.modelo_versao = e.target.value}
                                 />
                             </Grid>
@@ -82,6 +104,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Ano de Fabricação"
                                     required
+                                    initialValue={carro.ano_fabricacao}
                                     onChange={(e) => carro.ano_fabricacao = e.target.value}
                                 />
                             </Grid>
@@ -95,6 +118,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Ano modelo"
                                     required
+                                    initialValue={carro.ano_modelo}
                                     onChange={(e) => carro.ano_modelo = e.target.value}
                                 />
                             </Grid>
@@ -110,6 +134,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Quilometragem"
                                     required
+                                    initialValue={carro.quilometragem}
                                     onChange={(e) => carro.quilometragem = e.target.value}
                                 />
                             </Grid>
@@ -123,6 +148,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Valor"
                                     required
+                                    initialValue={carro.valor}
                                     onChange={(e) => carro.valor = e.target.value}
                                 />
                             </Grid>
@@ -138,6 +164,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Renavam"
                                     required
+                                    initialValue={carro.renavam}
                                     onChange={(e) => carro.renavam = e.target.value}
                                 />
                             </Grid>
@@ -151,6 +178,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Chassi"
                                     required
+                                    initialValue={carro.chassi}
                                     onChange={(e) => carro.chassi = e.target.value}
                                 />
                             </Grid>
@@ -158,20 +186,24 @@ export default function CadastroCarro() {
                         <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
                             <Grid xs={2.5}>
                                 <Checkbox css={{marginLeft: '18px'}} size="sm"
+                                    defaultSelected={carro.gnv == 1? true : false}
                                     onChange={(e) => e? carro.gnv = 1 : carro.gnv = 0}
                                 >GNV</Checkbox>
                             </Grid>
                             <Grid xs={3}>
-                                <Checkbox onChange={(e) => e? carro.vendido = 1 : carro.vendido = 0}
+                                <Checkbox defaultSelected={carro.vendido == 1? true : false} 
+                                onChange={(e) => e? carro.vendido = 1 : carro.vendido = 0}
                                 size="sm">Vendido</Checkbox>
                             </Grid>
                             <Grid xs={3}>
                                 <Checkbox size="sm"
+                                    defaultSelected={carro.devolvido == 1? true : false}
                                     onChange={(e) => e? carro.devolvido = 1 : carro.devolvido = 0}
                                 >Devolvido</Checkbox>
                             </Grid >
                             <Grid xs={3}>
                                 <Checkbox size="sm"
+                                    defaultSelected={carro.leiloado == 1? true : ''}
                                     onChange={(e) => e? carro.leiloado = 1 : carro.leiloado = 0}
                                 >Leiloado</Checkbox>
                             </Grid>
@@ -185,6 +217,7 @@ export default function CadastroCarro() {
                             size="lg"
                             placeholder="Observações"
                             required
+                            initialValue={carro.observacoes}
                             css={{marginTop: '15px'}}
                             onChange={(e) => carro.observacoes = e.target.value}
                         />
@@ -200,40 +233,20 @@ export default function CadastroCarro() {
         return (
             <>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <Grid.Container gap={2} >
+                    <Grid.Container gap={1} >
                         <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
 
-                            <Text blockquote>O vendedor deste carro já é cadastrado no sistema?</Text>
+                            <SelectCliente primeiraOpcao={"Selecione o vendedor"}
+                            opcaoIncluir={true}
+                            retorno={(e) => carro.fornecedor = e}
+                            opcaoSelecionada={carro.fornecedor}
+                            ></SelectCliente> 
                             
                         </Grid>
-                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                <Button color="secondary" auto onPress={() => setVendedorCadastrado(true)}>
-                                    Sim
-                                </Button>
-                                <Spacer x={0.5} />
-                                <Button color="secondary" auto onPress={() => setOpenModal(true)}>
-                                    Não
-                                </Button>
-                        </Grid>
-                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            
-
-                            {vendedorCadastrado? 
-
-                                <SelectCliente primeiraOpcao={"Selecione o vendedor"}></SelectCliente> 
-                            : 
-                                
-                            ''}
-
-                        </Grid>
-
+                    
                     </Grid.Container>
                 </div>
-                <ModalIncluirCliente
-                    mostrarBotao={false}
-                    open={openModal}
-                    close={setOpenModal}
-                ></ModalIncluirCliente>
+                
 
             </>
         )
@@ -247,7 +260,9 @@ export default function CadastroCarro() {
         if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            setMainImagePreview(e.target.result);
+            const base64WithoutPrefix = e.target.result.split(',')[1]; // Remove o prefixo
+            setMainImagePreview(base64WithoutPrefix);
+            
         };
         reader.readAsDataURL(file);
         } else {
@@ -261,7 +276,8 @@ export default function CadastroCarro() {
         const reader = new FileReader();
         reader.onload = (e) => {
             const newPreviews = [...secondaryImagePreviews];
-            newPreviews[index] = e.target.result;
+            const base64WithoutPrefix = e.target.result.split(',')[1];
+            newPreviews[index] = base64WithoutPrefix;
             setSecondaryImagePreviews(newPreviews);
         };
         reader.readAsDataURL(file);
@@ -286,7 +302,7 @@ export default function CadastroCarro() {
                             accept="image/*"
                             onChange={handleMainImageChange}
                         />
-                        {mainImagePreview && <img src={mainImagePreview} alt="Preview" />}
+                        {mainImagePreview && <img src={'data:image/png;base64,' + mainImagePreview} alt="Preview" />}
                         </div>
                     </label>
                 <div className="secondary-images">
@@ -299,7 +315,7 @@ export default function CadastroCarro() {
                         accept="image/*"
                         onChange={(e) => handleSecondaryImageChange(e, index)}
                         />
-                        {secondaryImagePreviews[index] && <img src={secondaryImagePreviews[index]} alt="Preview" />}
+                        {secondaryImagePreviews[index] && <img src={'data:image/png;base64,' + secondaryImagePreviews[index]} alt="Preview" />}
                     </label>
                     ))}
                 </div>
@@ -354,6 +370,29 @@ export default function CadastroCarro() {
             return <Imagens/>;
           default: return null;
         }
+    }
+
+    function onPressHandler(){
+        setActiveStep(activeStep + 1);
+        saveCarro();
+        if(activeStep == 3){
+
+            imgs.push({
+                id_carro: '', 
+                img: mainImagePreview,
+                principal: 1
+            })
+
+            secondaryImagePreviews.forEach(imgPreview  => {
+                imgs.push({
+                    id_carro: '', 
+                    img: imgPreview,
+                    principal: 0
+                })
+            });
+
+        }
+        
     }
 
     return (
@@ -433,7 +472,7 @@ export default function CadastroCarro() {
             </div>
 
             <div style={{display: 'flex', justifyContent: 'center', marginTop: '45px'}}>
-                <Button onPress={() => setActiveStep(activeStep + 1)}>{activeStep != 3? 'Próximo' : 'Finalizar cadastro'}</Button>
+                <Button onPress={onPressHandler}>{activeStep != 3? 'Próximo' : 'Finalizar cadastro'}</Button>
                 <Spacer y={1}></Spacer>
                 {activeStep > 1? 
                     <Button onPress={() => setActiveStep(activeStep - 1)}>Anterior</Button>
