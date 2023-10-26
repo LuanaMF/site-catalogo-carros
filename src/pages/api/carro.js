@@ -53,6 +53,24 @@ async function getImgs(id){
 
 }
 
+async function cadastraImagens(imagens){
+
+  imagens.shift();
+  imagens.forEach(async img => {
+      const sql = `
+             INSERT INTO img_carro (id_carro, img, principal)
+             VALUES (?, ?, ?)
+          `;
+    
+      const response = await query({
+        query: sql,
+        values: [img.id_carro, img.img, img.principal]
+      })
+  });
+  
+
+}
+
 //Função retorna img principal de carro especifico passado id
 async function getImgPrincipal(id){
   const sql = `
@@ -127,18 +145,25 @@ async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilome
         }
 }
 
-async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs){
+async function cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, chassi, fornecedor, renavam, valor){
   const sql = `
-            INSERT INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO carro (marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes, chassi, fornecedor, renavam, valor)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `;
 
   const response = await query({
     query: sql,
-    values: [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs]
+    values: [marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, chassi, fornecedor, renavam, valor]
   })
+
+  let idNovocarro = null;
+
+  if ('insertId' in response) {
+     idNovocarro = response.insertId;
+  }
+
   if (Object.keys(response).length > 0) {
-    return response[0]
+    return idNovocarro
   } else {
     return null
   }
@@ -148,7 +173,7 @@ export default async function servicoCarro(req, res) {
 
   // Recebe o serviço
   const service = req.body.service;
-  const {marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs} = req.body;
+  const {marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes, chassi, fornecedor, renavam, valor} = req.body;
   
   if(service){
 
@@ -156,8 +181,16 @@ export default async function servicoCarro(req, res) {
 
       //Serviço que cadastra carro
       case 'cadastrarCarro':{
-        const result = await cadastraCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs);
+        const result = await cadastraCarro(marca, modelo_versao, ano_fabricacao, ano_modelo, quilometragem, combustivel_id, cambio, vendido, devolvido, leiloado, gnv, observacoes, chassi, fornecedor, renavam, valor);
         res.json({ result: result});
+       
+        break;
+      }
+
+      //Serviço que cadastra carro
+      case 'saveImagens':{
+        const result = await cadastraImagens(req.body.imagens);
+        res.json({ result: 'Ok'});
        
         break;
       }
@@ -166,7 +199,7 @@ export default async function servicoCarro(req, res) {
       case'editarCarro' :{
         const { id } = req.body;
 
-        const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id);
+        //const result = await editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido, leiloado, gnv, obs, id);
         res.json({ result: result});
        
         break;
@@ -184,11 +217,13 @@ export default async function servicoCarro(req, res) {
       case 'getCombustiveis':{
         const result = await getCombustiveis();
         res.json({ result: result});
+        break;
       }
 
       case 'getImgPrincipal':{
         const result = await getImgPrincipal(req.body.idCarro);
         res.json({ result: result});
+        break;
       }
     }
 

@@ -14,7 +14,7 @@ export default function SelectCombustivel({retorno, opcaoSelecionada}) {
   const selectedValue = React.useMemo(
     () => {
         var value;
-        let selectedDescription = 'Selecione o combustivel';
+        let selectedDescription;
 
         if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
           value = opcaoSelecionada;
@@ -34,7 +34,6 @@ export default function SelectCombustivel({retorno, opcaoSelecionada}) {
     [selected]
   );
   
-
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +50,7 @@ export default function SelectCombustivel({retorno, opcaoSelecionada}) {
   return (
     <Dropdown>
       <Dropdown.Button flat color="warning">
-        {selectedValue}
+        {selectedValue == ''? 'Selecione o combustível' : selectedValue}
       </Dropdown.Button>
       <Dropdown.Menu
         aria-label="Single selection actions"

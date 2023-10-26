@@ -2,8 +2,9 @@ import SelectCliente from "@/components/SelectCliente";
 import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea} from "@nextui-org/react";
 import { useState } from "react";
 import {BsCarFront, BsImageFill, BsPersonCircle, BsImage} from 'react-icons/bs';
-import ModalIncluirCliente from "@/components/ModalIncluirCliente";
+import SelectCombustivel from "@/components/SelectCombustivel";
 import * as router from '@/pages/api/router';
+import Select from "@/components/Select";
 
 
 export default function CadastroCarro() {
@@ -13,22 +14,26 @@ export default function CadastroCarro() {
         modelo_versao: '',
         ano_fabricacao: '',
         ano_modelo: '',
-        quilometragem: '',
-        combustivel_id: '',
+        quilometragem: 0,
+        combustivel_id: 0,
         cambio: '',
         fornecedor: '',
-        valor: '',
-        gnv: '',
-        vendido: '',
-        devolvido: '',
+        valor: 0,
+        gnv: 0,
+        vendido: 0,
+        devolvido: 0,
         renavam: '',
         chassi: '', 
-        leiloado: '',
+        leiloado: 0,
         observacoes: '',
         service: 'cadastrarCarro'
     });
 
-    const [imgs, setImgs] = useState([{}])
+    const [imgs, setImgs] = useState([{
+        id_carro: '',
+        img: '',
+        principal: 0
+    }])
 
     const [openModal, setOpenModal] = useState('')
 
@@ -36,19 +41,31 @@ export default function CadastroCarro() {
         
         try {
             const responseCarro = await router.apiPost(carro, 'carro');
-            
-            console.log(responseCarro.result)
+            const idCarro = responseCarro.result;
 
-            //const responseImg = await router.apiPost(carro, 'carro');
-            // if(argCliente && Object.keys(argCliente).length > 0){
-            //     alertProps.mensagem = 'Cliente alterado com sucesso!'
-            // }
-    
+            imgs.forEach(img => {
+                img.id_carro = idCarro
+            });
+
+            const responseImg = await router.apiPost({service: 'saveImagens', imagens: imgs}, 'carro');
+            window.location.href('/telaCarros');
             
-        } catch (error) {
+        } catch (error) { 
             console.log(error);
         }
-      }
+    }
+
+    const cambios = [
+          {
+              value: 'M',
+              descricao: 'Manual'
+          },
+          {
+              value: 'A',
+              descricao: 'Automático'
+          },
+          
+    ]
 
     function Carro() {
         return (
@@ -135,7 +152,7 @@ export default function CadastroCarro() {
                                     placeholder="Quilometragem"
                                     required
                                     initialValue={carro.quilometragem}
-                                    onChange={(e) => carro.quilometragem = e.target.value}
+                                    onChange={(e) => carro.quilometragem = parseFloat(e.target.value)}
                                 />
                             </Grid>
                             <Grid xs={6}>
@@ -149,7 +166,7 @@ export default function CadastroCarro() {
                                     placeholder="Valor"
                                     required
                                     initialValue={carro.valor}
-                                    onChange={(e) => carro.valor = e.target.value}
+                                    onChange={(e) => carro.valor = parseFloat(e.target.value)}
                                 />
                             </Grid>
                         </Grid.Container>
@@ -181,8 +198,33 @@ export default function CadastroCarro() {
                                     initialValue={carro.chassi}
                                     onChange={(e) => carro.chassi = e.target.value}
                                 />
+                            </Grid>   
+                        </Grid.Container>
+
+                        <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
+                            <Grid xs={4}>
+                                <SelectCombustivel
+                                retorno={(e) => carro.combustivel_id = parseInt(e)}
+                                ></SelectCombustivel>
+                            </Grid>
+                           
+                            <Grid xs={3.5} css={{marginLeft: '8px'}}>
+                                <Select
+                                primeiraOpcao={'Selecione o cambio'}
+                                    options={cambios}
+                                    retorno={(e) => carro.cambio = e}
+                                ></Select>
+                            </Grid>
+                            
+                            <Grid xs={3} css={{marginLeft: '5px'}}>
+                                <SelectCliente primeiraOpcao={"Selecione o vendedor"}
+                                opcaoIncluir={true}
+                                retorno={(e) => carro.fornecedor = e}
+                                opcaoSelecionada={carro.fornecedor}
+                                ></SelectCliente> 
                             </Grid>
                         </Grid.Container>
+
                         <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
                             <Grid xs={2.5}>
                                 <Checkbox css={{marginLeft: '18px'}} size="sm"
@@ -229,28 +271,6 @@ export default function CadastroCarro() {
         
     }
     
-    function Fornecedor() {
-        return (
-            <>
-                <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <Grid.Container gap={1} >
-                        <Grid xs={12} css={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-
-                            <SelectCliente primeiraOpcao={"Selecione o vendedor"}
-                            opcaoIncluir={true}
-                            retorno={(e) => carro.fornecedor = e}
-                            opcaoSelecionada={carro.fornecedor}
-                            ></SelectCliente> 
-                            
-                        </Grid>
-                    
-                    </Grid.Container>
-                </div>
-                
-
-            </>
-        )
-    }
     
     const [mainImagePreview, setMainImagePreview] = useState(null);
     const [secondaryImagePreviews, setSecondaryImagePreviews] = useState(Array(4).fill(null));
@@ -352,17 +372,6 @@ export default function CadastroCarro() {
             return <Carro/>;
           case 2: 
 
-            stepperProps.lineColor2 = 'gray'
-            stepperProps.iconColor2 = 'gray'
-            stepperProps.buttonColor3 = '$gray400'
-
-            stepperProps.lineColor1 = '#F5A524'
-            stepperProps.iconColor1 = 'white'
-            stepperProps.buttonColor2 = 'warning'
-
-            return <Fornecedor/>;
-          case 3: 
-
             stepperProps.lineColor2 = '#F5A524'
             stepperProps.iconColor2 = 'white'
             stepperProps.buttonColor3 = 'warning'
@@ -374,8 +383,8 @@ export default function CadastroCarro() {
 
     function onPressHandler(){
         setActiveStep(activeStep + 1);
-        saveCarro();
-        if(activeStep == 3){
+        
+        if(activeStep == 2){
 
             imgs.push({
                 id_carro: '', 
@@ -390,6 +399,8 @@ export default function CadastroCarro() {
                     principal: 0
                 })
             });
+
+            saveCarro();
 
         }
         
@@ -430,25 +441,6 @@ export default function CadastroCarro() {
                     style={{
                     width: '80px',
                     height: '1.5px',
-                    backgroundColor: stepperProps.lineColor1,
-                    }}
-                />
-                <Button
-                    rounded
-                    auto
-                    animated
-                    style={{ 
-                       
-                        margin: '0.3rem' 
-                    }}
-                    size="md"
-                    color={stepperProps.buttonColor2}   
-                    icon={<BsPersonCircle size={25} color={stepperProps.iconColor1}></BsPersonCircle>}
-                />
-                <div
-                    style={{
-                    width: '80px',
-                    height: '1.5px',
                     backgroundColor: stepperProps.lineColor2,
                     }}
                 />
@@ -472,7 +464,7 @@ export default function CadastroCarro() {
             </div>
 
             <div style={{display: 'flex', justifyContent: 'center', marginTop: '45px'}}>
-                <Button onPress={onPressHandler}>{activeStep != 3? 'Próximo' : 'Finalizar cadastro'}</Button>
+                <Button onPress={onPressHandler}>{activeStep != 2? 'Próximo' : 'Finalizar cadastro'}</Button>
                 <Spacer y={1}></Spacer>
                 {activeStep > 1? 
                     <Button onPress={() => setActiveStep(activeStep - 1)}>Anterior</Button>
