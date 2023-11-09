@@ -1,10 +1,12 @@
 import SelectCliente from "@/components/SelectCliente";
-import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea} from "@nextui-org/react";
+import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea, Modal} from "@nextui-org/react";
 import { useState } from "react";
 import {BsCarFront, BsImageFill, BsPersonCircle, BsImage} from 'react-icons/bs';
 import SelectCombustivel from "@/components/SelectCombustivel";
 import * as router from '@/pages/api/router';
 import Select from "@/components/Select";
+import {FcCheckmark, FcCancel} from 'react-icons/fc'
+
 
 
 export default function CadastroCarro() {
@@ -48,10 +50,19 @@ export default function CadastroCarro() {
             });
 
             const responseImg = await router.apiPost({service: 'saveImagens', imagens: imgs}, 'carro');
-            window.location.href('/telaCarros');
+
+            alertProps.mensagem = "Carro cadastrado com sucesso!";
+            alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
+
+            setVisible(true);
+            setTimeout(() => {
+                window.location.href = '/telaCarros';
+            }, 1500);
             
         } catch (error) { 
-            console.log(error);
+            alertProps.mensagem = "Erro ao cadastrar carro!";
+            alertProps.icon = <FcCancel size={80}></FcCancel>
+            setVisible(true);   
         }
     }
 
@@ -382,6 +393,7 @@ export default function CadastroCarro() {
     }
 
     function onPressHandler(){
+        
         setActiveStep(activeStep + 1);
         
         if(activeStep == 2){
@@ -406,8 +418,28 @@ export default function CadastroCarro() {
         
     }
 
+    const [alertProps, setAlertProps] = useState({
+        mensagem: 'Carro cadastrado com sucesso!',
+        icon: <FcCheckmark size={80}></FcCheckmark>
+    }
+    )
+    const [visible, setVisible] = useState(false);
+
+    const closeHandler = () => {
+        setVisible(false);
+    };
+
     return (
         <>  
+            {/* Modal que to usando como alert */}
+            <Modal noPadding open={visible} onClose={closeHandler} css={{h:'200px'}}>
+            <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+                {alertProps.icon}
+                <Text css={{marginBottom: '80px'}}>
+                {alertProps.mensagem}
+                </Text>
+            </Modal.Body>
+            </Modal>
             <div style={{display: 'flex', justifyContent: 'center', marginTop: '80px'}}>
 
                 <Text h1    
