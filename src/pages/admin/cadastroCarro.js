@@ -55,11 +55,13 @@ export default function CadastroCarro() {
             alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
 
             setVisible(true);
+
             setTimeout(() => {
                 window.location.href = '/telaCarros';
             }, 1500);
             
         } catch (error) { 
+
             alertProps.mensagem = "Erro ao cadastrar carro!";
             alertProps.icon = <FcCancel size={80}></FcCancel>
             setVisible(true);   
@@ -212,31 +214,26 @@ export default function CadastroCarro() {
                             </Grid>   
                         </Grid.Container>
 
-                        <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
-                            <Grid xs={4}>
-                                <SelectCombustivel
-                                retorno={(e) => carro.combustivel_id = parseInt(e)}
-                                ></SelectCombustivel>
-                            </Grid>
-                           
-                            <Grid xs={3.5} css={{marginLeft: '8px'}}>
-                                <Select
-                                primeiraOpcao={'Selecione o cambio'}
-                                    options={cambios}
-                                    retorno={(e) => carro.cambio = e}
-                                ></Select>
-                            </Grid>
-                            
-                            <Grid xs={3} css={{marginLeft: '5px'}}>
-                                <SelectCliente primeiraOpcao={"Selecione o vendedor"}
-                                opcaoIncluir={true}
-                                retorno={(e) => carro.fornecedor = e}
-                                opcaoSelecionada={carro.fornecedor}
-                                ></SelectCliente> 
-                            </Grid>
-                        </Grid.Container>
+                        <SelectCombustivel css={{marginTop: '10px'}}
+                            primeiraOpcao={'Selecione o combustível'}
+                            retorno={(e) => carro.combustivel_id = parseInt(e)}
+                        ></SelectCombustivel>
 
-                        <Grid.Container css={{marginTop: '10px'}} gap={0.5}>
+                        <Select css={{marginTop: '10px'}}
+                            primeiraOpcao={'Selecione o cambio'}
+                            options={cambios}
+                            retorno={(e) => carro.cambio = e}
+                        ></Select>
+
+                        <SelectCliente css={{marginTop: '10px'}}
+                            primeiraOpcao={"Selecione o vendedor"}
+                            opcaoIncluir={true}
+                            retorno={(e) => carro.fornecedor = e}
+                            opcaoSelecionada={carro.fornecedor}
+                        ></SelectCliente> 
+
+
+                        <Grid.Container css={{marginTop: '30px'}} gap={0.5}>
                             <Grid xs={2.5}>
                                 <Checkbox css={{marginLeft: '18px'}} size="sm"
                                     defaultSelected={carro.gnv == 1? true : false}
