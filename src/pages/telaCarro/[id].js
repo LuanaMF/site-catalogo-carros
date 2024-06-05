@@ -48,35 +48,18 @@ function TelaCarro() {
                     gap: '0px',
                 }}
             >
-                <Carousel
-                    dynamicHeight
-                    width='80%'
-                    style={{maxHeight: '100px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', borderRadius: '10px'}}
-                    renderArrow={({ type, onClick }) => {
-                        const arrowStyle = {
-                            color: 'yellow', // Altera a cor das setas para amarelo (um estilo de aviso)
-                            // Outros estilos conforme necessário
-                        };
-                        const isPrev = type === 'prev';
-                    return (
-                        <div onClick={onClick} style={{...arrowStyle, cursor: 'pointer', position: 'absolute', top: '50%', transform: 'translateY(-50%)', zIndex: '1', backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '50%'}}>
-                            {isPrev ? '<' : '>'}
+               <Carousel dynamicHeight width='80%' style={{maxHeight: '100px'}}>
+                    {carro.imagens.map((item, index) => (
+                        <div key={index} style={{backgroundColor: '#002F60'}}>
+                            <Image objectFit='contain' src={`data:image/png;base64,${item.img}`} />
                         </div>
-                     );
-    }}
->
-    {carro.imagens.map((item, index) => (
-        <div key={index} style={{backgroundColor: '#002F60'}}>
-            <Image objectFit='contain' src={`data:image/png;base64,${item.img}`} />
-        </div>
-    ))}
-</Carousel>
-
+                    ))}
+                </Carousel>
                 
                 <div>
                 <Card css={{ w: '90%', backgroundImage: 'url("/img/bg.png")', color: 'white', backgroundPosition: 'center' }}>
                     <Card.Header css={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                        <Text css={{color: 'White', fontSize: '50px', fontFamily:'cursive'}}>Saiba mais</Text>
+                        <Text css={{color: 'White', fontSize: '50px', fontFamily:'cursive'}}>{carro.carro.marca + ' - ' + carro.carro.valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</Text>
                     </Card.Header>
 
                     <Card.Divider />
