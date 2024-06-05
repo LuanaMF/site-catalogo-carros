@@ -215,7 +215,7 @@ export default function CadastroCarro() {
                         </Grid.Container>
                         <div>
                             <Input
-                                        css={{marginBottom: '10px', width: '90%', marginLeft: '18px'}}
+                                        css={{marginBottom: '18px', width: '90%', marginLeft: '18px'}}
                                         aria-label="forncedor"
                                         clearable
                                         bordered
@@ -234,7 +234,7 @@ export default function CadastroCarro() {
                             retorno={(e) => carro.combustivel_id = parseInt(e)}
                         ></SelectCombustivel>
 
-                        <Select style="margin-top: 15px !important;"
+                        <Select 
                             primeiraOpcao={'Selecione o cambio'}
                             options={cambios}
                             retorno={(e) => carro.cambio = e}
