@@ -213,26 +213,33 @@ export default function CadastroCarro() {
                                 />
                             </Grid>   
                         </Grid.Container>
-
-                        <SelectCombustivel css={{marginTop: '10px'}}
+                        <div>
+                            <Input
+                                        css={{marginBottom: '10px', width: '90%', marginLeft: '18px'}}
+                                        aria-label="forncedor"
+                                        clearable
+                                        bordered
+                                        fullWidth
+                                        color="primary"
+                                        size="lg"
+                                        placeholder="Fornecedor"
+                                        required
+                                        initialValue={carro.fornecedor}
+                                        onChange={(e) => carro.fornecedor = e.target.value}
+                            />
+                        </div>
+                       
+                        <SelectCombustivel css={{}}
                             primeiraOpcao={'Selecione o combustível'}
                             retorno={(e) => carro.combustivel_id = parseInt(e)}
                         ></SelectCombustivel>
 
-                        <Select css={{marginTop: '10px'}}
+                        <Select style="margin-top: 15px !important;"
                             primeiraOpcao={'Selecione o cambio'}
                             options={cambios}
                             retorno={(e) => carro.cambio = e}
                         ></Select>
-
-                        <SelectCliente css={{marginTop: '10px'}}
-                            primeiraOpcao={"Selecione o vendedor"}
-                            opcaoIncluir={true}
-                            retorno={(e) => carro.fornecedor = e}
-                            opcaoSelecionada={carro.fornecedor}
-                        ></SelectCliente> 
-
-
+                        
                         <Grid.Container css={{marginTop: '30px'}} gap={0.5}>
                             <Grid xs={2.5}>
                                 <Checkbox css={{marginLeft: '18px'}} size="sm"
