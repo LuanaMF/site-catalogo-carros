@@ -163,7 +163,7 @@ export default function CadastroCarro() {
                                     placeholder="Quilometragem"
                                     required
                                     initialValue={carro.quilometragem != 0? carro.quilometragem : ''}
-                                    onChange={(e) => carro.quilometragem = parseFloat(e.target.value)}
+                                    onChange={(e) => carro.quilometragem = e.target.value}
                                 />
                             </Grid>
                             <Grid xs={6}>
@@ -177,7 +177,7 @@ export default function CadastroCarro() {
                                     placeholder="Valor"
                                     required
                                     initialValue={carro.valor != 0? carro.valor : ''}
-                                    onChange={(e) => carro.valor = parseFloat(e.target.value)}
+                                    onChange={(e) => carro.valor = e.target.value}
                                 />
                             </Grid>
                         </Grid.Container>
@@ -342,7 +342,7 @@ export default function CadastroCarro() {
                         </div>
                     </label>
                 <div className="secondary-images">
-                    {Array.from({ length: 4 }, (_, index) => (
+                    {Array.from({ length: 2 }, (_, index) => (
                     <label key={index} htmlFor={`secondary-image${index + 1}`} className="upload-box">
                         <BsImage color="gray"></BsImage>
                         <input

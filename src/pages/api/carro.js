@@ -56,15 +56,16 @@ async function getImgs(id){
 async function cadastraImagens(imagens){
 
   imagens.shift();
-  imagens.forEach(async img => {
+  imagens.forEach(async (img, index) => {
       const sql = `
              INSERT INTO img_carro (id_carro, img, principal)
              VALUES (?, ?, ?)
           `;
-    
+      let principal = index === 0 ? 1 : 0;
+
       const response = await query({
         query: sql,
-        values: [img.id_carro, img.img, img.principal]
+        values: [img.id_carro, img.img, principal]
       })
   });
   
