@@ -164,7 +164,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Quilometragem"
                                     required
-                                    initialValue={carro.quilometragem}
+                                    initialValue={carro.quilometragem != 0? carro.quilometragem : ''}
                                     onChange={(e) => carro.quilometragem = parseFloat(e.target.value)}
                                 />
                             </Grid>
@@ -178,7 +178,7 @@ export default function CadastroCarro() {
                                     size="lg"
                                     placeholder="Valor"
                                     required
-                                    initialValue={carro.valor}
+                                    initialValue={carro.valor != 0? carro.valor : ''}
                                     onChange={(e) => carro.valor = parseFloat(e.target.value)}
                                 />
                             </Grid>
@@ -195,6 +195,7 @@ export default function CadastroCarro() {
                                     placeholder="Renavam"
                                     required
                                     initialValue={carro.renavam}
+                                    maxLength={'12'}
                                     onChange={(e) => carro.renavam = e.target.value}
                                 />
                             </Grid>
@@ -209,6 +210,7 @@ export default function CadastroCarro() {
                                     placeholder="Chassi"
                                     required
                                     initialValue={carro.chassi}
+                                    maxLength={'17'}
                                     onChange={(e) => carro.chassi = e.target.value}
                                 />
                             </Grid>   
@@ -222,14 +224,15 @@ export default function CadastroCarro() {
                                         fullWidth
                                         color="primary"
                                         size="lg"
-                                        placeholder="Fornecedor"
+                                        placeholder="CPF do fornecedor"
                                         required
                                         initialValue={carro.fornecedor}
+                                        maxLength={'11'}
                                         onChange={(e) => carro.fornecedor = e.target.value}
                             />
                         </div>
                        
-                        <SelectCombustivel css={{}}
+                        <SelectCombustivel 
                             primeiraOpcao={'Selecione o combustível'}
                             retorno={(e) => carro.combustivel_id = parseInt(e)}
                         ></SelectCombustivel>
