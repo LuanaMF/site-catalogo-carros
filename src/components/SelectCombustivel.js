@@ -2,9 +2,9 @@ import React from "react";
 import { Dropdown } from "@nextui-org/react";
 import * as router from '@/pages/api/router';
 
-export default function SelectCombustivel({retorno, opcaoSelecionada}) {
+export default function SelectCombustivel({retorno, opcaoSelecionada, primeiraOpcao}) {
 
-  const [selected, setSelected] = React.useState(new Set(['']));
+  const [selected, setSelected] = React.useState(new Set([primeiraOpcao]));
 
   const [combustiveis, setCombustiveis] = React.useState([{
     id: '',
@@ -14,7 +14,7 @@ export default function SelectCombustivel({retorno, opcaoSelecionada}) {
   const selectedValue = React.useMemo(
     () => {
         var value;
-        let selectedDescription = 'Selecione o combustivel';
+        let selectedDescription = primeiraOpcao;
 
         if(opcaoSelecionada && Object.keys(opcaoSelecionada).length > 0){
           value = opcaoSelecionada;
@@ -34,7 +34,6 @@ export default function SelectCombustivel({retorno, opcaoSelecionada}) {
     [selected]
   );
   
-
   React.useEffect(() => {
     const fetchData = async () => {
       try {
