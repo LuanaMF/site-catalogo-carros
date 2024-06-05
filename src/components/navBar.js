@@ -27,7 +27,7 @@ export default function NavbarCliente() {
         <Navbar.Toggle aria-label="toggle navigation" showIn={"xs"} />
         <Navbar.Brand>
             <Link href="/">
-                <Image src="/logo.png" width={102} height={45} alt="Logo" />
+                <Image src="/img/carro-vendaa.png" width={118} height={60} alt="Logo" />
             </Link>
         </Navbar.Brand>
         <Navbar.Content enableCursorHighlight hideIn="xs" variant="highlight-rounded">

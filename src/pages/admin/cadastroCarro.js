@@ -6,11 +6,11 @@ import SelectCombustivel from "@/components/SelectCombustivel";
 import * as router from '@/pages/api/router';
 import Select from "@/components/Select";
 import {FcCheckmark, FcCancel} from 'react-icons/fc'
-
+import InputMask from 'react-input-mask'
 
 
 export default function CadastroCarro() {
-
+    
     const [carro, setCarro] = useState({
         marca: '',
         modelo_versao: '',
@@ -30,14 +30,12 @@ export default function CadastroCarro() {
         observacoes: '',
         service: 'cadastrarCarro'
     });
-
+    
     const [imgs, setImgs] = useState([{
         id_carro: '',
         img: '',
         principal: 0
     }])
-
-    const [openModal, setOpenModal] = useState('')
 
     async function saveCarro() {
         
@@ -422,6 +420,15 @@ export default function CadastroCarro() {
             saveCarro();
 
         }
+        
+    }
+
+    function priceFormat(input){
+        const value = input.value;
+        let price = value.toString().split('').reverse().join('').replace('.','')
+        price = price.replace(/(\d{2})/, '$1,')
+        price = price.replace(/(\d{3}(?!$))/g, '$1.') 
+        this.value = price.split('').reverse().join('')
         
     }
 
