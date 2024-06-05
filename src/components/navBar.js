@@ -40,12 +40,6 @@ export default function NavbarCliente() {
           <Navbar.Link isActive={isLinkActive("/contato")} href="contato">
             Contato
           </Navbar.Link>
-          <Navbar.Link isActive={isLinkActive("/servicos")} href="servicos">
-            Serviços
-          </Navbar.Link>
-          <Navbar.Link isActive={isLinkActive("/venda")} href="venda">
-            Venda
-          </Navbar.Link>
         </Navbar.Content>
         <Navbar.Collapse showIn={"xs"}>
           {collapseItems.map((item, index) => (
