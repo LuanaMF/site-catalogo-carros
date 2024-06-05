@@ -1,7 +1,7 @@
 // 1. import `NextUIProvider` component
 import { NextUIProvider } from '@nextui-org/react';
 import NavbarCliente from '@/components/navBar';
-
+import '../styles/globalStyle.css';
 
 function MyApp({ Component, pageProps }) {
   const collapseItems = [

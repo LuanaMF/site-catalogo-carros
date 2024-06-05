@@ -81,7 +81,7 @@ export default function ModalIncluirCliente({argCliente, open, close, mostrarBot
             </Text>
           </Modal.Body>
         </Modal>
-      {mostrarBotao? <Button auto shadow onPress={handler}>
+        {mostrarBotao? <Button auto shadow onPress={handler}>
                 <FaPlus></FaPlus>
             </Button> 
         : ''}

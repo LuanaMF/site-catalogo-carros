@@ -21,6 +21,10 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
+        <footer style={{marginTop: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'gray'}}>
+          © Luana Fraga - luanaf.dev@gmail.com
+          
+        </footer>
       </Html>
     );
   }
