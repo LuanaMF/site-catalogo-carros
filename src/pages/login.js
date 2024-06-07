@@ -58,7 +58,7 @@ export default function Login() {
             <div style={{ 
                 marginTop: '30px', display: 'flex', alignItems: 'center', 
                 justifyContent: 'center', flexDirection: 'column', border: '1px solid #ccc', 
-                boxShadow: '0 8px 16px rgba(122, 130, 255, 0.7)' , margin: '2rem'}}>
+                boxShadow: '0 8px 16px rgba(122, 130, 255, 0.7)' , margin: '4rem'}}>
                 <div>
                     <div>
                         <Image src="/img/logo.png" alt="Description" css={{ width: '200px', height: '200px' }} />
