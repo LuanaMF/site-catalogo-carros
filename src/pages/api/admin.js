@@ -31,16 +31,7 @@ async function cadastraAdmin(nome, sobrenome, login, senha){
 }
 
 async function login(login, senha){
-  const response = await query({
-    query: 'SELECT * FROM admin WHERE login = ? AND senha = ?;',
-    values: [login, senha]
-  })
-
-  if (Object.keys(response).length > 0) {
-    return response[0]
-  } else {
-    return null
-  }
+  
 
 }
 
@@ -119,8 +110,17 @@ export default async function servicoAdmin(req, res) {
 
         const {login, senha} = req.body;
         const senhaHash = md5(senha);
-        const response = await login(login, senhaHash);
-        res.json({ result: response});
+        const response = await query({
+          query: 'SELECT * FROM admin WHERE login = ? AND senha = ?;',
+          values: [login, senhaHash]
+        })
+      
+        if (Object.keys(response).length > 0) {
+          res.json({ result: response[0]});
+        } else {
+          return res.json({ result: false});
+        }
+        
         
         break;
       }

@@ -1,9 +1,60 @@
-import { Image, Input, Grid, Text, Button } from "@nextui-org/react";
-
+import { Image, Input, Grid, Text, Button, Modal } from "@nextui-org/react";
+import * as router from '@/pages/api/router';
+import React, {  useState } from 'react';
+import {FcCancel, FcCheckmark} from 'react-icons/fc'
 
 export default function Login() {
+
+    const [user, setUser] = useState({
+        login: '',
+        senha: '',
+        service: 'login'
+    })
+
+    const [alertProps, setAlertProps] = useState({
+        mensagem: 'Login ou senha incorretos. Tente novamente!',
+        icon: <FcCancel size={80}></FcCancel>
+    })
+
+    const closeHandler = () => {
+        setVisible(false);
+      };
+
+    const [visible, setVisible] = useState(false);
+
+    async function login() {
+       try{
+            const responseCarro = await router.apiPost(user, 'admin');
+            if(!responseCarro.result){
+                setVisible(true);
+            }
+            else{
+
+                alertProps.mensagem = "Login realizado com sucesso!";
+                alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
+    
+                setVisible(true);
+
+                setTimeout(() => {
+                    window.location.href = '/telaCarros';
+                }, 1500);
+            }
+       }catch(e){
+
+       }
+    };
+
     return (
         <>  
+            {/* Modal que to usando como alert */}
+            <Modal noPadding open={visible} onClose={closeHandler} css={{h:'200px'}}>
+            <Modal.Body css={{justifyContent: 'center', alignItems: 'center'}}>
+                {alertProps.icon}
+                <Text css={{marginBottom: '80px'}}>
+                {alertProps.mensagem}
+                </Text>
+            </Modal.Body>
+            </Modal>
             <div style={{ 
                 marginTop: '30px', display: 'flex', alignItems: 'center', 
                 justifyContent: 'center', flexDirection: 'column', border: '1px solid #ccc', 
@@ -20,13 +71,17 @@ export default function Login() {
             
                 <div style={ {display: 'flex', width: '30%', flexDirection:'column', marginLeft: '100px'}}>
                     <div style={{}}>
-                        <Input style={{width: '300px'}} placeholder="Login"></Input>
-                        <Input style={{width: '300px' }} css={{marginTop: '15px'}} placeholder="Senha"></Input>
+                        <Input style={{width: '300px'}} placeholder="Login"
+                        onChange={(e) => user.login = e.target.value}
+                        ></Input>
+                        <Input type="password" style={{width: '300px' }} css={{marginTop: '15px'}} placeholder="Senha"
+                        onChange={(e) => user.senha = e.target.value}
+                        ></Input>
                     </div>
                     
                 </div>
                 <div style={{marginTop: '40px', }}>
-                    <Button style={{backgroundColor: '#7a82ff', fontWeight: 'bolder'}}>
+                    <Button style={{backgroundColor: '#7a82ff', fontWeight: 'bolder'}} onPress={login}>
                         Entrar
                     </Button>
                 </div>
