@@ -21,5 +21,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: '/admin/cadastroCarro'
+  matcher: '/admin/:path*'
 }

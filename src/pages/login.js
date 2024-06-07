@@ -26,8 +26,8 @@ export default function Login() {
 
     async function login() {
        try{
-            const responseCarro = await router.apiPost(user, 'admin');
-            if(!responseCarro.result){
+            const response = await router.apiPost(user, 'admin');
+            if(!response.result){
 
                 alertProps.mensagem = 'Login ou senha incorretos. Tente novamente!',
                 alertProps.icon = <FcCancel size={80}></FcCancel>
