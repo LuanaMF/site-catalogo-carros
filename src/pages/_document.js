@@ -16,15 +16,14 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>{CssBaseline.flush()}</Head>
+        <Head>
+          {CssBaseline.flush()}
+          <link href="./output.css" rel="stylesheet"></link>
+        </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-        <footer style={{marginTop: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'gray'}}>
-          © Luana Fraga - luanaf.dev@gmail.com
-          
-        </footer>
       </Html>
     );
   }
