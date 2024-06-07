@@ -1,4 +1,3 @@
-import SelectCliente from "@/components/SelectCliente";
 import { Text, Input, Card, Button, Spacer, Grid, Checkbox, Textarea, Modal} from "@nextui-org/react";
 import { useState } from "react";
 import {BsCarFront, BsImageFill, BsPersonCircle, BsImage} from 'react-icons/bs';

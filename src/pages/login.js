@@ -2,6 +2,8 @@ import { Image, Input, Grid, Text, Button, Modal } from "@nextui-org/react";
 import * as router from '@/pages/api/router';
 import React, {  useState } from 'react';
 import {FcCancel, FcCheckmark} from 'react-icons/fc'
+import Cookies from 'js-cookie';
+
 
 export default function Login() {
 
@@ -26,7 +28,12 @@ export default function Login() {
        try{
             const responseCarro = await router.apiPost(user, 'admin');
             if(!responseCarro.result){
+
+                alertProps.mensagem = 'Login ou senha incorretos. Tente novamente!',
+                alertProps.icon = <FcCancel size={80}></FcCancel>
+                
                 setVisible(true);
+                Cookies.set('user', null)
             }
             else{
 
@@ -34,6 +41,8 @@ export default function Login() {
                 alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
     
                 setVisible(true);
+
+                Cookies.set('user', response.result);
 
                 setTimeout(() => {
                     window.location.href = '/telaCarros';
