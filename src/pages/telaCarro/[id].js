@@ -38,6 +38,7 @@ function TelaCarro() {
         <NavbarCliente></NavbarCliente>
         <div>
             <div 
+            className=' !shadow-2xl'
                 style={{
                     display: 'block',
                     marginTop: '100px',
@@ -47,19 +48,22 @@ function TelaCarro() {
                     height: '120vh',
                     gap: '0px',
                 }}
-            >
-               <Carousel dynamicHeight width='80%' style={{maxHeight: '100px'}}>
-                    {carro.imagens.map((item, index) => (
-                        <div key={index} style={{backgroundColor: '#002F60'}}>
-                            <Image objectFit='contain' src={`data:image/png;base64,${item.img}`} />
-                        </div>
-                    ))}
-                </Carousel>
-                
+            >   
+            <div id="div-carrousel" style={{display:'block', w: '80%' }}>
+                <Carousel  
+                        keyBoardControl={true} 
+                        style={{ marginBottom: '30px' }}>
+                        {carro.imagens.map((item, index) => ( 
+                            <div key={index} style={{backgroundColor: '#002F60'}}>
+                                <Image objectFit='contain' src={`data:image/png;base64,${item.img}`} />
+                            </div>
+                        ))}
+                    </Carousel>
+            </div> 
                 <div>
                 <Card css={{ w: '90%', backgroundImage: 'url("/img/bg.png")', color: 'white', backgroundPosition: 'center' }}>
                     <Card.Header css={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                        <Text css={{color: 'White', fontSize: '50px', fontFamily:'cursive'}}>{carro.carro.marca + ' - ' + carro.carro.valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</Text>
+                        <Text css={{color: 'White', fontSize: '50px', fontFamily:'fangsong'}}>{carro.carro.marca + ' - ' + carro.carro.valor?.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</Text>
                     </Card.Header>
 
                     <Card.Divider />

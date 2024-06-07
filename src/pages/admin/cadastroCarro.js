@@ -517,6 +517,10 @@ export default function CadastroCarro() {
                     : ''
                 }
             </div>
+            <footer style={{marginTop: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'gray'}}>
+          © Luana Fraga - luanaf.dev@gmail.com
+          
+        </footer>
         </>
     );
 }
