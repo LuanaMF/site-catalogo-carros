@@ -21,7 +21,10 @@ export default function CarrouselCarros({mostrarVendidos, adm}) {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await router.get('carro');
+            let response = await router.get('carro');
+            if(mostrarVendidos){
+              response = await router.apiPost({apenasVendidos: true}, 'carro');
+            }
             setCarros(response.result);
           } catch (error) {
             console.log(error);

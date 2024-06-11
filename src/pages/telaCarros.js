@@ -9,7 +9,7 @@ export default function App() {
   return (
     <>
       <NavbarCliente></NavbarCliente>
-      <CarrouselCarros></CarrouselCarros>
+      <CarrouselCarros mostrarVendidos={false}></CarrouselCarros>
     </>
   );
 }

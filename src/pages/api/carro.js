@@ -95,7 +95,25 @@ async function getImgPrincipal(id){
 async function getAllCarros(){
   // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
   const sql = `
-    SELECT *, (SELECT img FROM img_carro as img WHERE img.id_carro = c.id AND principal = 1)AS imgPrincipal FROM carro AS c;
+    SELECT *, (SELECT img FROM img_carro as img WHERE img.id_carro = c.id AND principal = 1)AS imgPrincipal FROM carro AS c where vendido = 0;
+  `
+  const response = await query({
+    query: sql,
+    values: []
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response
+  } else {
+    return null
+  }
+ 
+}
+// Retorna todos carros
+async function getAllCarrosVendidos(){
+  // Ele retorna as imagens em um só campo 'imagem' só que separado por virgula, ai a gente faz esse tratamento no front
+  const sql = `
+    SELECT *, (SELECT img FROM img_carro as img WHERE img.id_carro = c.id AND principal = 1)AS imgPrincipal FROM carro AS c where vendido = 1;
   `
   const response = await query({
     query: sql,
@@ -228,7 +246,7 @@ export default async function servicoCarro(req, res) {
       }
     }
 
-  }else{
+  }else{  
     
     // Se não passar o serviço na requisição, mas passar o id, ele retorna o carro e imagens com esse id
     if(req.body.id){
@@ -241,6 +259,11 @@ export default async function servicoCarro(req, res) {
 
     }
 
+    if(req.body.apenasVendidos){
+      const result = await getAllCarrosVendidos();
+      res.json({ result: result});
+    }
+    
     //Se não passar nada no body retorna todos os carros e suas imagens
     else{
       const result = await getAllCarros();

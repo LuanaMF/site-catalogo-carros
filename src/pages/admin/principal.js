@@ -14,6 +14,8 @@ export default function principalAdm() {
             <CarrouselCarros adm={true}></CarrouselCarros>
 
             <Divider css={{marginTop: '40px', marginLeft: '30px', width: '1300px', color: 'gray', fontSize:'100px'}}>Carros Vendidos</Divider>
+
+            <CarrouselCarros mostrarVendidos={true}></CarrouselCarros>
         </>
     )
 }
