@@ -23,7 +23,7 @@ export default function NavbarCliente() {
 
   return (
     <>
-      <Navbar  variant="floating">
+      <Navbar id="navbar-cliente" variant="floating">
         <Navbar.Toggle aria-label="toggle navigation" showIn={"xs"} />
         <Navbar.Brand>
             <Link href="/">

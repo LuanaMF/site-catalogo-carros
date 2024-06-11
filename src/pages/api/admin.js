@@ -114,7 +114,7 @@ export default async function servicoAdmin(req, res) {
           query: 'SELECT * FROM admin WHERE login = ? AND senha = ?;',
           values: [login, senhaHash]
         })
-      
+
         if (Object.keys(response).length > 0) {
           res.json({ result: response[0]});
         } else {

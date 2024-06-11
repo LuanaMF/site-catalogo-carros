@@ -1,9 +1,9 @@
-import { Card, Grid, Row, Text, Link } from "@nextui-org/react";
+import { Card, Grid, Row, Text, Link, Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import * as router from '@/pages/api/router';
 
 
-export default function CarrouselCarros() {
+export default function CarrouselCarros({mostrarVendidos, adm}) {
 
     const [carros, setCarros] = useState([{
         id: '',
@@ -13,6 +13,10 @@ export default function CarrouselCarros() {
         ano_modelo: ''
 
     }])
+
+    function vender(){
+      
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +43,15 @@ export default function CarrouselCarros() {
         <Grid xs={6} sm={3} key={index}>
           <Link block href={"telaCarro/"+item.id}>
             <Card isPressable isHoverable css={{h: '300px'}}>
+              {
+                adm? 
+                <Card.Header css={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Button style={{backgroundColor: 'green'}}>Vender</Button>
+              </Card.Header>
+              :
+              ''
+              }
+              
               <Card.Body css={{ p: 0}} >
                 <Card.Image
                   src={`data:image/png;base64,${item.imgPrincipal}`}

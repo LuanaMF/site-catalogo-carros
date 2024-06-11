@@ -9,7 +9,7 @@ export function middleware(req) {
   const isAdminRoute = pathname.includes('admin');
   const userCookie = Cookies.get('user');
   const isAuthenticated = userCookie !== undefined;
-
+  console.log(userCookie);
 
   // Se a rota é admin e o usuário não está autenticado, redirecione para /telaCarros
   if (isAdminRoute && !isAuthenticated) {
@@ -21,5 +21,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: '/admin/:path*'
+  matcher: '/admin/cadastroCarro'
 }

@@ -69,34 +69,34 @@ function TelaCarro() {
                     <Card.Divider />
 
                     <Card.Body >
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Marca: '+carro.carro.marca}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Modelo/Versão: '+carro.carro.modelo_versao}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Ano de fabricação: '+carro.carro.ano_fabricacao}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Ano do modelo: '+carro.carro.ano_modelo}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Quilometragem: '+carro.carro.quilometragem+'km'}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Combustível: '+carro.carro.combustivel}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Cambio: '+ (carro.carro.cambio == 'M'? 'Manual': 'Automático')}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'GNV: '+ (carro.carro.gnv == '0'? 'Não': 'Sim')}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Passagem por Leilão: '+ (carro.carro.leiloado == '0'? 'Não': 'Sim')}
                         </Text>
-                        <Text css={{color:'White', fontSize: '20px'}}>
+                        <Text css={{color:'White', fontSize: '30px'}}>
                             {'Observações: '+ carro.carro.observacoes}
                         </Text>
                     </Card.Body>

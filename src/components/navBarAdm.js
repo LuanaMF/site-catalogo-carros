@@ -23,7 +23,7 @@ export default function NavbarAdm() {
 
   return (
     <>
-      <Navbar  variant="floating">
+      <Navbar id="navbar-adm" variant="floating">
         <Navbar.Toggle aria-label="toggle navigation" showIn={"xs"} />
         <Navbar.Brand>
             <Link href="/">
@@ -32,7 +32,7 @@ export default function NavbarAdm() {
         </Navbar.Brand>
         <Navbar.Content enableCursorHighlight hideIn="xs" variant="highlight-rounded">
           <Navbar.Link isActive={isLinkActive("/admin/cadastroCarro")} href="/admin/cadastroCarro">
-            Cadastrar carro
+            Cadastro de carros
           </Navbar.Link>
         </Navbar.Content>
         <Navbar.Collapse showIn={"xs"}>
