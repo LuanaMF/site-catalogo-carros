@@ -142,6 +142,20 @@ async function deleteCarro(id){
   }
 
 }
+async function vender(id){
+
+  const response = await query({
+    query: 'UPDATE carro SET vendido = 1 WHERE id = ?',
+    values: [id]
+  })
+
+  if (Object.keys(response).length > 0) {
+    return response[0]
+  } else {
+    return null
+  }
+
+}
 
 async function editaCarro(marca, modeloVersao, anoFabricacao, anoModelo, quilometragem, combustivel, cambio, vendido, devolvido,leiloado, gnv, obs, id){
   const sql = `
@@ -244,6 +258,11 @@ export default async function servicoCarro(req, res) {
         res.json({ result: result});
         break;
       }
+      case 'vender':{
+        const result = await vender(req.body.idCarro);
+        res.json({ result: result});
+        break;
+      }
     }
 
   }else{  
@@ -263,7 +282,7 @@ export default async function servicoCarro(req, res) {
       const result = await getAllCarrosVendidos();
       res.json({ result: result});
     }
-    
+
     //Se não passar nada no body retorna todos os carros e suas imagens
     else{
       const result = await getAllCarros();

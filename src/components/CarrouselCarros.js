@@ -3,19 +3,26 @@ import { useEffect, useState } from "react";
 import * as router from '@/pages/api/router';
 
 
-export default function CarrouselCarros({mostrarVendidos, adm}) {
+export default function CarrouselCarros({mostrarVendidos, adm=false}) {
 
     const [carros, setCarros] = useState([{
         id: '',
         imgPrincipal: '',
         marca: '',
-        valor: '',
+        valor: 0,
         ano_modelo: ''
 
     }])
 
-    function vender(){
+    async function vender(id){
+      try {
       
+        const response = await router.apiPut({service: 'vender', idCarro: id}, 'carro');
+       
+        setCarros(response.result);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     useEffect(() => {
@@ -38,19 +45,19 @@ export default function CarrouselCarros({mostrarVendidos, adm}) {
       style: 'currency',
       currency: 'BRL',
     });
-
+  
   return (
     <>
     <Grid.Container gap={2} justify="flex-start">
-      {carros.map((item, index) => (
+      {carros?.map((item, index) => (
         <Grid xs={6} sm={3} key={index}>
           <Link block href={"telaCarro/"+item.id}>
             <Card isPressable isHoverable css={{h: '300px'}}>
               {
                 adm? 
-                <Card.Header css={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Button style={{backgroundColor: 'green'}}>Vender</Button>
-              </Card.Header>
+                  <Card.Header css={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <Button style={{backgroundColor: 'green'}} onClick={vender(item.id)}>Vender</Button>
+                </Card.Header>
               :
               ''
               }

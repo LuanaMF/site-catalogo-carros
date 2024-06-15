@@ -11,11 +11,11 @@ export default function principalAdm() {
             
             <Divider css={{marginTop: '40px', marginLeft: '30px', width: '1300px', color: 'gray', fontSize:'100px', marginBottom: '30px'}}>Carros em catálogo</Divider>
 
-            <CarrouselCarros adm={true}></CarrouselCarros>
+            <CarrouselCarros adm={true} mostrarVendidos={false}></CarrouselCarros>
 
             <Divider css={{marginTop: '40px', marginLeft: '30px', width: '1300px', color: 'gray', fontSize:'100px'}}>Carros Vendidos</Divider>
 
-            <CarrouselCarros mostrarVendidos={true}></CarrouselCarros>
+            <CarrouselCarros mostrarVendidos={true} adm={false}></CarrouselCarros>
         </>
     )
 }
