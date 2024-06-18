@@ -2,7 +2,7 @@ import { Navbar, Button, Link, Text } from "@nextui-org/react";
 
 import Image from "next/image";
 
-export default function NavbarCliente() {
+export default function NavbarAdm() {
   const collapseItems = [
     "Sobre nós",
     "Carros",
@@ -23,7 +23,7 @@ export default function NavbarCliente() {
 
   return (
     <>
-      <Navbar id="navbar-cliente" variant="floating">
+      <Navbar id="navbar-adm" variant="floating">
         <Navbar.Toggle aria-label="toggle navigation" showIn={"xs"} />
         <Navbar.Brand>
             <Link href="/">
@@ -31,14 +31,8 @@ export default function NavbarCliente() {
             </Link>
         </Navbar.Brand>
         <Navbar.Content enableCursorHighlight hideIn="xs" variant="highlight-rounded">
-          <Navbar.Link isActive={isLinkActive("/")} href="/">
-            Sobre nós
-          </Navbar.Link>
-          <Navbar.Link isActive={isLinkActive("/telaCarros")} href="../telaCarros">
-            Carros
-          </Navbar.Link>
-          <Navbar.Link isActive={isLinkActive("/contato")} href="contato">
-            Contato
+          <Navbar.Link isActive={isLinkActive("/admin/cadastroCarro")} href="/admin/cadastroCarro">
+            Cadastro de carros
           </Navbar.Link>
         </Navbar.Content>
         <Navbar.Collapse showIn={"xs"}>

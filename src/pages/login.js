@@ -26,14 +26,14 @@ export default function Login() {
 
     async function login() {
        try{
-            const responseCarro = await router.apiPost(user, 'admin');
-            if(!responseCarro.result){
+            const response = await router.apiPut(user, 'admin');
+            
+            if(!response.result || response.result == undefined){
 
                 alertProps.mensagem = 'Login ou senha incorretos. Tente novamente!',
                 alertProps.icon = <FcCancel size={80}></FcCancel>
                 
                 setVisible(true);
-                Cookies.set('user', null)
             }
             else{
 
@@ -41,11 +41,10 @@ export default function Login() {
                 alertProps.icon = <FcCheckmark size={80}></FcCheckmark>
     
                 setVisible(true);
-
                 Cookies.set('user', response.result);
-
+            
                 setTimeout(() => {
-                    window.location.href = '/telaCarros';
+                    window.location.href = '/admin/principal';
                 }, 1500);
             }
        }catch(e){
