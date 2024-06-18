@@ -14,16 +14,7 @@ export default function CarrouselCarros({mostrarVendidos, adm=false}) {
 
     }])
 
-    async function vender(id){
-      try {
-      
-        const response = await router.apiPut({service: 'vender', idCarro: id}, 'carro');
-       
-        setCarros(response.result);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+   
 
     useEffect(() => {
         const fetchData = async () => {
